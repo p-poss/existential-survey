@@ -9,8 +9,8 @@ export default function Home() {
         <div className="min-h-screen flex items-center justify-center py-8 px-4">
           <div className="container mx-auto">
             <div className="text-center mb-8">
-              <h1 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">Questions To Contemplate</h1>
-              <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
+              <h1 className="text-5xl font-bold text-white mb-6 drop-shadow-lg min-h-[6rem]">Questions To Contemplate</h1>
+              <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed drop-shadow-md min-h-[6rem]">
                 Take time to reflect on life, death, and what comes after. This survey is anonymous and was created as a design research experiment.
               </p>            </div>
             <SurveyForm />
