@@ -129,9 +129,9 @@ export default function SurveyForm() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
-          className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-white border-opacity-20"
+          className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-white border-opacity-20 min-h-[20rem]"
         >
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800 min-h-[3.5rem] flex items-start">
             {currentQ.question}
           </h2>
 
@@ -193,8 +193,8 @@ export default function SurveyForm() {
             disabled={isSubmitting}
             className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Send size={20} />
-            <span>{isSubmitting ? 'Submitting...' : 'Submit Survey'}</span>
+            
+            <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
           </button>
         ) : (
           <button
