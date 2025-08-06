@@ -1,20 +1,23 @@
-import SurveyForm from '@/components/SurveyForm'
+import SurveyForm from "@/components/SurveyForm"
+import VideoBackground from "@/components/VideoBackground"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Existential Survey
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Reflect on life, death, and what comes after. This anonymous survey explores 
-            our deepest thoughts about mortality, legacy, and the meaning of existence.
-          </p>
+    <main className="fixed inset-0 w-full h-full overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+      <VideoBackground />
+      <div className="absolute inset-0 z-10 overflow-y-auto overflow-x-hidden">
+        <div className="min-h-screen flex items-center justify-center py-8 px-4">
+          <div className="container mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">Existential Survey</h1>
+              <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
+                Reflect on life, death, and what comes after. This anonymous survey explores
+                our deepest thoughts about mortality, legacy, and the meaning of existence.
+              </p>
+            </div>
+            <SurveyForm />
+          </div>
         </div>
-        
-        <SurveyForm />
       </div>
     </main>
   )

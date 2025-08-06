@@ -91,7 +91,7 @@ export default function SurveyForm() {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-2xl mx-auto p-6 text-center"
       >
-        <div className="bg-green-50 border border-green-200 rounded-lg p-8">
+        <div className="bg-green-50 bg-opacity-95 backdrop-blur-sm border border-green-200 rounded-lg p-8 shadow-xl">
           <h2 className="text-2xl font-bold text-green-800 mb-4">
             Thank you for your responses!
           </h2>
@@ -129,7 +129,7 @@ export default function SurveyForm() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
-          className="bg-white rounded-lg shadow-lg p-6 mb-6"
+          className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-white border-opacity-20"
         >
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
             {currentQ.question}
@@ -181,9 +181,9 @@ export default function SurveyForm() {
         <button
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
-          className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ChevronLeft size={20} />
+
           <span>Previous</span>
         </button>
 
@@ -191,7 +191,7 @@ export default function SurveyForm() {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={20} />
             <span>{isSubmitting ? 'Submitting...' : 'Submit Survey'}</span>
@@ -199,10 +199,10 @@ export default function SurveyForm() {
         ) : (
           <button
             onClick={handleNext}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             <span>Next</span>
-            <ChevronRight size={20} />
+            
           </button>
         )}
       </div>
