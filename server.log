@@ -1,0 +1,31 @@
+
+> survey-app@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.4.5 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.67:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 593ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1206ms
+ GET / 200 in 1391ms
+ GET / 200 in 47ms
+ ✓ Compiled /favicon.ico in 102ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 364ms
+ ✓ Compiled /api/survey in 126ms
+ POST /api/survey 201 in 542ms
+ ✓ Compiled /admin in 223ms
+ GET /admin 200 in 265ms
+ GET /api/survey 200 in 391ms
+ GET /admin 200 in 25ms
+ ✓ Compiled in 17ms
+ ✓ Compiled / in 16ms
+ GET / 200 in 180ms
+ POST /api/survey 201 in 785ms
+ ✓ Compiled in 12ms
+ GET / 200 in 136ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 223ms
+ POST /api/survey 201 in 334ms
