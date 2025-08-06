@@ -9,12 +9,10 @@ export default function Home() {
         <div className="min-h-screen flex items-center justify-center py-8 px-4">
           <div className="container mx-auto">
             <div className="text-center mb-8">
-              <h1 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">Existential Survey</h1>
+              <h1 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">Questions To Contemplate</h1>
               <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
-                Reflect on life, death, and what comes after. This anonymous survey explores
-                our deepest thoughts about mortality, legacy, and the meaning of existence.
-              </p>
-            </div>
+                Take time to reflect on life, death, and what comes after. This survey is anonymous and was created as a design research experiment.
+              </p>            </div>
             <SurveyForm />
           </div>
         </div>
