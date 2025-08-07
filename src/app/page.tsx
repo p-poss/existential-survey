@@ -1,37 +1,190 @@
 'use client'
 
 import { useState } from 'react'
-import SurveyForm from "@/components/SurveyForm"
 import ContentAreaVideo from "@/components/ContentAreaVideo"
 import NoiseOverlay from "@/components/NoiseOverlay"
+import { surveyQuestions } from '@/data/questions'
+
+// Question Content Component
+function QuestionContent({ 
+  currentQuestion, 
+  formData,
+  onInputChange
+}: { 
+  currentQuestion: number;
+  formData: FormData;
+  onInputChange: (value: string, option?: string) => void;
+}) {
+  const currentQ = surveyQuestions[currentQuestion]
+  const fieldName = `q${currentQ.id}`
+  const optionFieldName = `${fieldName}_option`
+
+  const handleWriteInChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const writeInText = e.target.value
+    onInputChange('Something else (write in)', writeInText)
+  }
+  
+  return (
+    <div>
+      <h2 className="text-lg font-semibold text-black mb-6">
+        {currentQ.question}
+      </h2>
+      <div>
+        {currentQ.type === 'text' ? (
+          <textarea
+            value={formData[fieldName] || ''}
+            onChange={(e) => onInputChange(e.target.value)}
+            className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 resize-none bg-transparent"
+            style={{ outline: 'none', color: 'black' }}
+            rows={4}
+            placeholder="Type your answer here..."
+          />
+        ) : (
+          <div className="space-y-3">
+            {currentQ.options?.map((option, index) => (
+              <label key={index} className="flex items-center space-x-3 cursor-pointer">
+                <div className="relative">
+                                      <div 
+                      className="w-4 h-4 rounded-full"
+                      style={{ 
+                        border: '1px solid black',
+                        backgroundColor: formData[fieldName] === option ? 'black' : 'transparent'
+                      }}
+                    />
+                  <input
+                    type="radio"
+                    name={fieldName}
+                    value={option}
+                    checked={formData[fieldName] === option}
+                    onChange={(e) => onInputChange(e.target.value)}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </div>
+                <span className="text-black">{option}</span>
+              </label>
+            ))}
+            
+                      {/* Custom input for "Something else (write in)" option */}
+          <div className="relative h-12">
+            {formData[fieldName] === 'Something else (write in)' && (
+              <div className="absolute top-3 inset-x-0">
+                <input
+                    type="text"
+                    value={formData[optionFieldName] || ''}
+                    onChange={handleWriteInChange}
+                    placeholder="Please specify..."
+                    className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 bg-transparent"
+                    style={{ outline: 'none', color: 'black' }}
+                    autoComplete="off"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+interface FormData {
+  [key: string]: string;
+}
 
 export default function Home() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isComplete, setIsComplete] = useState(false)
+  const [formData, setFormData] = useState<FormData>({})
 
   return (
-    <main className="fixed inset-0 w-full h-full overflow-hidden bg-white">
-      <div className="absolute inset-0 z-10 overflow-y-auto overflow-x-hidden">
-        <div className="min-h-screen flex items-center justify-center py-8 px-4 relative">
-          {/* Content positioned within the video area */}
-          <div className="absolute inset-4 flex items-center justify-center">
-            <div className="w-full max-w-[800px] h-full max-h-[600px] relative z-20 p-8">
-              
-              {/* Video Background */}
+    <main className="min-h-screen w-full bg-white flex items-center justify-center">
+      <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100vh-32px)] min-h-0 flex flex-col mx-auto">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+          {/* Content container */}
+          <div className="w-full flex flex-col flex-1">
+            {/* Chunk 1: Video area with number and noise */}
+            <div className="h-[400px] relative z-20">
               <div className="absolute inset-0 overflow-hidden rounded-md">
                 <ContentAreaVideo questionNumber={currentQuestion + 1} />
               </div>
               
-              {/* Centered Survey Content */}
-              <div className="absolute inset-0 flex items-center justify-center z-10">
-                <SurveyForm currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} />
+              <div className="absolute top-8 left-8 z-10">
+                <span className="text-sm text-white drop-shadow-md">
+                  {(currentQuestion + 1).toString().padStart(2, '0')} / 10
+                </span>
               </div>
               
-              {/* Noise Overlay */}
               <NoiseOverlay />
-              
+            </div>
+            
+            {/* Chunk 2: Question content - Fixed spacing from video */}
+            <div className="h-[200px] mt-8 pl-8">
+              <QuestionContent 
+                currentQuestion={currentQuestion}
+                formData={formData}
+                onInputChange={(value, option) => {
+                  const fieldName = `q${surveyQuestions[currentQuestion].id}`
+                  const optionFieldName = `${fieldName}_option`
+                  setFormData(prev => ({
+                    ...prev,
+                    [fieldName]: value,
+                    [optionFieldName]: option || ''
+                  }))
+                }}
+              />
             </div>
           </div>
-          
+        </div>
+
+        {/* Chunk 3: Navigation buttons at bottom */}
+        <div className="mt-auto">
+          <div className="w-full flex justify-between">
+            <button
+              onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
+              disabled={currentQuestion === 0}
+              className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-black rounded-lg disabled:opacity-50 cursor-pointer border border-black"
+              style={{ 
+                backdropFilter: 'blur(2px)', 
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                opacity: 1
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+            >
+              <span>←</span>
+            </button>
+
+            {currentQuestion === 9 ? (
+              <button
+                onClick={() => setIsSubmitting(true)}
+                className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-black rounded-lg disabled:opacity-50 cursor-pointer border border-black"
+                style={{ 
+                  backdropFilter: 'blur(2px)', 
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  opacity: 1
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                <span>Submit</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => setCurrentQuestion(Math.min(9, currentQuestion + 1))}
+                className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-black rounded-lg cursor-pointer border border-black"
+                style={{ 
+                  backdropFilter: 'blur(2px)', 
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  opacity: 1
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                <span>→</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </main>

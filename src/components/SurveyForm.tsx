@@ -19,7 +19,7 @@ interface FormData {
   q10_option?: string
 }
 
-export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { currentQuestion: number; setCurrentQuestion: (question: number) => void }) {
+export default function SurveyForm({ currentQuestion, setCurrentQuestion, onSubmit }: { currentQuestion: number; setCurrentQuestion: (question: number) => void; onSubmit?: () => void }) {
   
   const [formData, setFormData] = useState<FormData>({
     q1: '', q2: '', q3: '', q4: '', q5: '',
@@ -37,6 +37,14 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
       ...prev,
       [fieldName]: value,
       ...(option && { [`${fieldName}_option`]: option })
+    }))
+  }
+
+  const handleWriteInChange = (value: string) => {
+    const fieldName = `q${currentQ.id}` as keyof FormData
+    setFormData(prev => ({
+      ...prev,
+      [`${fieldName}_option`]: value
     }))
   }
 
@@ -159,15 +167,16 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
               ))}
               
               {/* Custom input for "Something else (write in)" option */}
-              {(formData[`q${currentQ.id}` as keyof FormData] === 'Something else (write in)') && (
+              {(formData[`q${currentQ.id}` as keyof FormData] && (formData[`q${currentQ.id}` as keyof FormData] as string).includes('write in')) && (
                 <div className="mt-3">
                   <input
                     type="text"
                     value={formData[`q${currentQ.id}_option` as keyof FormData] as string || ''}
-                    onChange={(e) => handleInputChange(formData[`q${currentQ.id}` as keyof FormData] as string, e.target.value)}
+                    onChange={(e) => handleWriteInChange(e.target.value)}
                     placeholder="Please specify..."
                     className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 bg-transparent"
                     style={{ outline: 'none', color: 'white' }}
+                    autoComplete="off"
                   />
                 </div>
               )}
@@ -175,58 +184,6 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
           )}
         </motion.div>
       </AnimatePresence>
-
-      {/* Navigation Buttons */}
-      <div className="flex justify-between">
-        <button
-          onClick={handlePrevious}
-          disabled={currentQuestion === 0}
-          className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ 
-            backdropFilter: 'blur(2px)', 
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            opacity: 1
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
-          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-        >
-
-          <span style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' }}>Back</span>
-        </button>
-
-        {currentQuestion === surveyQuestions.length - 1 ? (
-          <button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ 
-              backdropFilter: 'blur(2px)', 
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              opacity: 1
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-          >
-            
-            <span style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' }}>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
-          </button>
-        ) : (
-          <button
-            onClick={handleNext}
-            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-white rounded-lg"
-            style={{ 
-              backdropFilter: 'blur(2px)', 
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              opacity: 1
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-          >
-            <span style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' }}>Skip</span>
-            
-          </button>
-        )}
-      </div>
     </div>
   )
 }
