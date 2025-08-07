@@ -81,8 +81,6 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
     }
   }
 
-  const progress = ((currentQuestion + 1) / surveyQuestions.length) * 100
-
   if (isComplete) {
     return (
       <motion.div
@@ -103,21 +101,12 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>Question {currentQuestion + 1} of {surveyQuestions.length}</span>
-          <span>{Math.round(progress)}%</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <motion.div
-            className="bg-gray-400 h-2 rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3 }}
-          />
-        </div>
+    <div className="w-[600px] mx-auto p-4">
+      {/* Question Counter */}
+      <div className="mb-8 text-left">
+        <span className="text-sm text-white drop-shadow-md">
+          {(currentQuestion + 1).toString().padStart(2, '0')} / {surveyQuestions.length.toString().padStart(2, '0')}
+        </span>
       </div>
 
       {/* Question Card */}
@@ -128,9 +117,9 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
-          className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-white border-opacity-20 min-h-[20rem]"
+          className="bg-transparent rounded-md mb-6 min-h-[20rem]"
         >
-          <h2 className="text-lg font-semibold mb-4 text-gray-800 min-h-[2.5rem] flex items-start leading-tight">
+          <h2 className="text-lg font-semibold mb-4 min-h-[2.5rem] flex items-start leading-tight text-white drop-shadow-lg">
             {currentQ.question}
           </h2>
 
@@ -138,23 +127,34 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
             <textarea
               value={formData[`q${currentQ.id}` as keyof FormData] as string}
               onChange={(e) => handleInputChange(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-black"
+              className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 resize-none bg-transparent"
+              style={{ outline: 'none', color: 'white' }}
               rows={4}
               placeholder="Type your answer here..."
             />
           ) : (
             <div className="space-y-3">
               {currentQ.options?.map((option, index) => (
-                <label key={index} className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name={`q${currentQ.id}`}
-                    value={option}
-                    checked={formData[`q${currentQ.id}` as keyof FormData] === option}
-                    onChange={(e) => handleInputChange(e.target.value)}
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-gray-700">{option}</span>
+                                <label key={index} className="flex items-center space-x-3 cursor-pointer">
+                  <div className="relative">
+                    <div 
+                      className="w-4 h-4 rounded-full"
+                      style={{ 
+                        backdropFilter: 'blur(2px)', 
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        opacity: formData[`q${currentQ.id}` as keyof FormData] === option ? 0.3 : 1
+                      }}
+                    />
+                    <input
+                      type="radio"
+                      name={`q${currentQ.id}`}
+                      value={option}
+                      checked={formData[`q${currentQ.id}` as keyof FormData] === option}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                  </div>
+                  <span className="text-white drop-shadow-md">{option}</span>
                 </label>
               ))}
               
@@ -166,7 +166,8 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
                     value={formData[`q${currentQ.id}_option` as keyof FormData] as string || ''}
                     onChange={(e) => handleInputChange(formData[`q${currentQ.id}` as keyof FormData] as string, e.target.value)}
                     placeholder="Please specify..."
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 bg-transparent"
+                    style={{ outline: 'none', color: 'white' }}
                   />
                 </div>
               )}
@@ -180,27 +181,48 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
         <button
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
-          className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ 
+            backdropFilter: 'blur(2px)', 
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            opacity: 1
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
         >
 
-          <span>Back</span>
+          <span style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' }}>Back</span>
         </button>
 
         {currentQuestion === surveyQuestions.length - 1 ? (
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ 
+              backdropFilter: 'blur(2px)', 
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              opacity: 1
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
           >
             
-            <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
+            <span style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' }}>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-white rounded-lg"
+            style={{ 
+              backdropFilter: 'blur(2px)', 
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              opacity: 1
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
           >
-            <span>Skip</span>
+            <span style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' }}>Skip</span>
             
           </button>
         )}
