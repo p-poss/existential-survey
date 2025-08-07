@@ -158,7 +158,7 @@ export default function Home() {
                 <ContentAreaVideo questionNumber={currentQuestion + 1} />
               </div>
               
-              <div className="absolute top-8 left-8 z-10">
+              <div className="absolute top-8 left-6 z-10">
                 <span className="text-sm text-white drop-shadow-md">
                   {(currentQuestion + 1).toString().padStart(2, '0')} / 10
                 </span>
