@@ -134,10 +134,10 @@ export default function Home() {
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-black mb-4">
-                Thank you for completing the survey!
+                Survey is now complete.
               </h2>
               <p className="text-black">
-                Your responses have been submitted successfully.
+                Responses submitted anonymously.
               </p>
             </div>
           </div>
