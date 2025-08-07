@@ -90,10 +90,6 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
         playsInline
         className={`w-full h-full object-cover ${isCurrentVideo ? 'block' : 'hidden'}`}
         onTimeUpdate={() => handleTimeUpdate(videoNum)}
-        onLoadStart={() => console.log(`Video ${videoNum}: load started`)}
-        onCanPlay={() => console.log(`Video ${videoNum}: can play`)}
-        onPlay={() => console.log(`Video ${videoNum}: playing`)}
-        onError={(e) => console.log(`Video ${videoNum}: error:`, e)}
       >
         <source src={videoSources[videoNum as keyof typeof videoSources]} type="video/mp4" />
       </video>
@@ -101,12 +97,10 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   }
 
   return (
-    <div className="absolute inset-4 flex items-center justify-center overflow-hidden">
-      <div className="w-full max-w-[1200px] h-full max-h-[800px] overflow-hidden rounded-lg">
-        {Array.from({ length: 10 }, (_, i) => i + 1).map(videoNum => 
-          createVideoElement(videoNum)
-        )}
-      </div>
+    <div className="w-full h-full overflow-hidden rounded-md">
+      {Array.from({ length: 10 }, (_, i) => i + 1).map(videoNum => 
+        createVideoElement(videoNum)
+      )}
     </div>
   )
 }
