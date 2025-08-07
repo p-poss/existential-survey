@@ -1,6 +1,11 @@
+'use client'
+
+import { useState } from 'react'
 import SurveyForm from '@/components/SurveyForm'
 
 export default function Home() {
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+
   return (
     <main className="relative min-h-screen overflow-hidden">
       {/* Full-screen video background */}
@@ -34,7 +39,7 @@ export default function Home() {
             </p>
           </div>
           
-          <SurveyForm />
+          <SurveyForm currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} />
         </div>
       </div>
     </main>

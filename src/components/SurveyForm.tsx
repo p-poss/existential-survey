@@ -42,13 +42,13 @@ export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { cu
 
   const handleNext = () => {
     if (currentQuestion < surveyQuestions.length - 1) {
-      setCurrentQuestion(prev => prev + 1)
+      setCurrentQuestion(currentQuestion + 1)
     }
   }
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
-      setCurrentQuestion(prev => prev - 1)
+      setCurrentQuestion(currentQuestion - 1)
     }
   }
 
