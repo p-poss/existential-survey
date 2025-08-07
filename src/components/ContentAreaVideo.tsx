@@ -97,7 +97,7 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   }
 
   return (
-    <div className="w-full h-full overflow-hidden rounded-md">
+    <div className="w-full max-w-[800px] h-full overflow-hidden rounded-md">
       {Array.from({ length: 10 }, (_, i) => i + 1).map(videoNum => 
         createVideoElement(videoNum)
       )}
