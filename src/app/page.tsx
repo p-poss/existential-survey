@@ -168,7 +168,7 @@ export default function Home() {
             </div>
             
             {/* Chunk 2: Question content - Fixed spacing from video */}
-            <div className="h-[200px] mt-8 pl-8">
+            <div className="h-[200px] mt-8 px-8">
               <QuestionContent 
                 currentQuestion={currentQuestion}
                 formData={formData}
