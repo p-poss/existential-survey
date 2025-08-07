@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { surveyQuestions } from '@/data/questions'
-import { ChevronLeft, ChevronRight, Send } from 'lucide-react'
 
 interface FormData {
   q1: string
@@ -20,8 +19,8 @@ interface FormData {
   q10_option?: string
 }
 
-export default function SurveyForm() {
-  const [currentQuestion, setCurrentQuestion] = useState(0)
+export default function SurveyForm({ currentQuestion, setCurrentQuestion }: { currentQuestion: number; setCurrentQuestion: (question: number) => void }) {
+  
   const [formData, setFormData] = useState<FormData>({
     q1: '', q2: '', q3: '', q4: '', q5: '',
     q6: '', q7: '', q8: '', q9: '', q10: ''
@@ -91,7 +90,7 @@ export default function SurveyForm() {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-2xl mx-auto p-6 text-center"
       >
-        <div className="bg-green-50 bg-opacity-95 backdrop-blur-sm border border-green-200 rounded-lg p-8 shadow-xl">
+        <div className="bg-green-50 bg-opacity-95 backdrop-blur-sm border border-green-200 rounded-lg p-8 shadow-xl min-h-[20rem]">
           <h2 className="text-2xl font-bold text-green-800 mb-4">
             Thank you for your responses!
           </h2>
@@ -113,7 +112,7 @@ export default function SurveyForm() {
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <motion.div
-            className="bg-blue-600 h-2 rounded-full"
+            className="bg-gray-400 h-2 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
@@ -131,7 +130,7 @@ export default function SurveyForm() {
           transition={{ duration: 0.3 }}
           className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-white border-opacity-20 min-h-[20rem]"
         >
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 min-h-[3.5rem] flex items-start">
+          <h2 className="text-lg font-semibold mb-4 text-gray-800 min-h-[2.5rem] flex items-start leading-tight">
             {currentQ.question}
           </h2>
 
@@ -139,7 +138,7 @@ export default function SurveyForm() {
             <textarea
               value={formData[`q${currentQ.id}` as keyof FormData] as string}
               onChange={(e) => handleInputChange(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-black"
               rows={4}
               placeholder="Type your answer here..."
             />
@@ -167,7 +166,7 @@ export default function SurveyForm() {
                     value={formData[`q${currentQ.id}_option` as keyof FormData] as string || ''}
                     onChange={(e) => handleInputChange(formData[`q${currentQ.id}` as keyof FormData] as string, e.target.value)}
                     placeholder="Please specify..."
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                   />
                 </div>
               )}
@@ -184,14 +183,14 @@ export default function SurveyForm() {
           className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
 
-          <span>Previous</span>
+          <span>Back</span>
         </button>
 
         {currentQuestion === surveyQuestions.length - 1 ? (
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             
             <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
@@ -199,9 +198,9 @@ export default function SurveyForm() {
         ) : (
           <button
             onClick={handleNext}
-            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
           >
-            <span>Next</span>
+            <span>Skip</span>
             
           </button>
         )}
