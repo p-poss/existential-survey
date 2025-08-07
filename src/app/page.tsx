@@ -96,6 +96,55 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
   const [formData, setFormData] = useState<FormData>({})
+  const [startTime] = useState(Date.now())
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    const completionTime = Math.round((Date.now() - startTime) / 1000)
+
+    try {
+      const response = await fetch('/api/survey', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          completion_time: completionTime
+        }),
+      })
+
+      if (response.ok) {
+        setIsComplete(true)
+      } else {
+        throw new Error('Submission failed')
+      }
+    } catch (error) {
+      console.error('Error submitting survey:', error)
+      alert('There was an error submitting your survey. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (isComplete) {
+    return (
+      <main className="min-h-screen w-full bg-white flex items-center justify-center">
+        <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100vh-32px)] min-h-0 flex flex-col mx-auto">
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-green-800 mb-4">
+                Thank you for completing the survey!
+              </h2>
+              <p className="text-gray-600">
+                Your responses have been submitted successfully.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen w-full bg-white flex items-center justify-center">
@@ -157,7 +206,8 @@ export default function Home() {
 
             {currentQuestion === 9 ? (
               <button
-                onClick={() => setIsSubmitting(true)}
+                onClick={handleSubmit}
+                disabled={isSubmitting}
                 className="flex items-center justify-center space-x-2 w-[120px] px-6 py-2 text-black rounded-lg disabled:opacity-50 cursor-pointer border border-black"
                 style={{ 
                   backdropFilter: 'blur(2px)', 
@@ -167,7 +217,7 @@ export default function Home() {
                 onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
                 onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
               >
-                <span>Submit</span>
+                <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
               </button>
             ) : (
               <button
