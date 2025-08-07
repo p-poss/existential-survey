@@ -130,7 +130,7 @@ export default function Home() {
   if (isComplete) {
     return (
       <main className="min-h-screen w-full bg-white flex items-center justify-center">
-        <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100vh-32px)] min-h-0 flex flex-col mx-auto">
+        <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto">
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-black mb-4">
@@ -148,7 +148,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen w-full bg-white flex items-center justify-center">
-      <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100vh-32px)] min-h-0 flex flex-col mx-auto">
+      <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto">
         <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">
           {/* Content container */}
           <div className="w-full flex flex-col flex-1">
