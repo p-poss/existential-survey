@@ -133,10 +133,10 @@ export default function Home() {
         <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100vh-32px)] min-h-0 flex flex-col mx-auto">
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <h2 className="text-2xl font-bold text-green-800 mb-4">
+              <h2 className="text-2xl font-bold text-black mb-4">
                 Thank you for completing the survey!
               </h2>
-              <p className="text-gray-600">
+              <p className="text-black">
                 Your responses have been submitted successfully.
               </p>
             </div>
