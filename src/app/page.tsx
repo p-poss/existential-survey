@@ -268,11 +268,11 @@ export default function Home() {
   }
 
   return (
-    <main className="h-[100dvh] w-full flex items-center justify-center" style={{
+    <main className="h-[100dvh] w-full" style={{
       background: 'linear-gradient(180deg, #F5F5F7 0%, #E8E8ED 100%)'
     }}>
-      {/* Desktop icon when window is closed */}
-      {!isWindowOpen && (
+      <div className="relative w-full h-full">
+        {/* Desktop icon always present and centered */}
         <div
           ref={iconRef}
           role="button"
@@ -281,12 +281,18 @@ export default function Home() {
           onDoubleClick={() => setIsWindowOpen(true)}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setIsWindowOpen(true) } }}
           style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'default',
-            userSelect: 'none'
+            userSelect: 'none',
+            pointerEvents: isWindowOpen ? 'none' : 'auto',
+            zIndex: 1
           }}
         >
           <div style={{
@@ -301,41 +307,53 @@ export default function Home() {
           </div>
           <div style={{
             marginTop: 8,
-            padding: '2px 8px',
-            borderRadius: 6,
-            background: 'rgba(255,255,255,0.6)',
-            border: '1px solid rgba(0,0,0,0.06)',
+            padding: '2px 6px',
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
             fontSize: 12,
             lineHeight: '16px',
-            color: '#1D1D1F',
-            boxShadow: '0 0 0 1px rgba(0,0,0,0.04)'
+            color: '#FFFFFF',
+            fontWeight: 600,
+            textShadow: '0 1px 2px rgba(0,0,0,0.6)',
+            textAlign: 'center'
           }}>Anonymous Survey</div>
         </div>
-      )}
 
-      {/* Window when open */}
-      <AnimatePresence>
-        {isWindowOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto shadow-2xl"
-            style={{
-              border: '1px solid rgba(0,0,0,0.1)',
-              borderRadius: '12px',
-              background: 'rgba(255,255,255,0.8)',
-              backdropFilter: 'blur(20px) saturate(180%)',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
-              overflow: 'hidden'
-            }}
-          >
-            <TitleBar onClose={() => setIsWindowOpen(false)} />
-            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto" style={{
-              background: 'rgba(255,255,255,0.95)'
+        {/* Window when open, absolutely centered above icon */}
+        <AnimatePresence>
+          {isWindowOpen && (
+            <div style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 'calc(100vw - 32px)',
+              maxWidth: 800,
+              height: 800,
+              maxHeight: 'calc(100dvh - 32px)',
+              minHeight: 0,
+              zIndex: 2
             }}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                className="flex flex-col shadow-2xl"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: '1px solid rgba(0,0,0,0.1)',
+                  borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.8)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
+                  overflow: 'hidden'
+                }}
+              >
+                <TitleBar onClose={() => setIsWindowOpen(false)} />
+                <div className="flex-1 flex flex-col min-h-0 overflow-y-auto" style={{
+                  background: 'rgba(255,255,255,0.95)'
+                }}>
           {/* Content container */}
           <div className="w-full flex flex-col flex-1">
             {/* Chunk 1: Video area with number and noise */}
@@ -482,10 +500,24 @@ export default function Home() {
               </button>
             )}
           </div>
-        </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                </div>
+                {/* Chunk 4: Navigation buttons at bottom */}
+                <div className="mt-auto" style={{
+                  background: 'rgba(255,255,255,0.95)',
+                  borderBottomLeftRadius: 12,
+                  borderBottomRightRadius: 12,
+                  padding: '12px'
+                }}>
+                  <div className="w-full flex gap-3">
+                    {/* buttons remain unchanged */}
+                    
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
     </main>
   )
 }
