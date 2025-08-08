@@ -54,7 +54,7 @@ function TitleBar() {
           fontWeight: 600,
           color: '#3A3A3C',
           letterSpacing: 0.2
-        }}>Existential Survey</div>
+        }}>Anonymous Survey</div>
       </div>
       {/* Right side spacer */}
       <div style={{width: 60}} />
