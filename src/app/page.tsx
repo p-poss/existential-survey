@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import ContentAreaVideo from "@/components/ContentAreaVideo"
 import { surveyQuestions } from '@/data/questions'
@@ -191,6 +191,32 @@ export default function Home() {
   const [isWindowOpen, setIsWindowOpen] = useState(false)
   const [isIconSelected, setIsIconSelected] = useState(false)
   const iconRef = useRef<HTMLDivElement | null>(null)
+  const audioCtxRef = useRef<AudioContext | null>(null)
+
+  const playClick = useCallback(() => {
+    try {
+      // Lazy-init AudioContext on first user gesture
+      if (!audioCtxRef.current) {
+        const AC = (window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)
+        if (!AC) return
+        audioCtxRef.current = new AC()
+      }
+      const ctx = audioCtxRef.current!
+      const now = ctx.currentTime
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'square'
+      osc.frequency.setValueAtTime(1000, now)
+      gain.gain.setValueAtTime(0.0001, now)
+      gain.gain.exponentialRampToValueAtTime(0.25, now + 0.006)
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07)
+      osc.connect(gain).connect(ctx.destination)
+      osc.start(now)
+      osc.stop(now + 0.08)
+    } catch {
+      // no-op if audio is unavailable
+    }
+  }, [])
 
   // Keyboard navigation
   useEffect(() => {
@@ -290,9 +316,9 @@ export default function Home() {
           tabIndex={0}
           aria-label="Open Anonymous Survey"
           aria-selected={isIconSelected}
-          onClick={() => setIsIconSelected(true)}
+          onClick={() => { playClick(); setIsIconSelected(true) }}
           onDoubleClick={() => { setIsIconSelected(false); setIsWindowOpen(true) }}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setIsIconSelected(false); setIsWindowOpen(true) } }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { playClick(); setIsIconSelected(false); setIsWindowOpen(true) } }}
           style={{
             position: 'absolute',
             left: '50%',
