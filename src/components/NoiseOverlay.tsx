@@ -63,7 +63,7 @@ export default function NoiseOverlay() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-30 rounded-md"
+      className="absolute inset-0 w-full h-full pointer-events-none z-30"
       style={{
         mixBlendMode: 'normal',
         opacity: 0.8
