@@ -242,12 +242,11 @@ export default function Home() {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex items-center justify-center space-x-2 w-1/2 px-6 py-2 text-black disabled:opacity-50 disabled:cursor-not-allowed border-2 border-black"
+                className="flex items-center justify-center space-x-2 w-1/2 px-6 py-2 text-black disabled:opacity-50 disabled:cursor-not-allowed cursor-crosshair border-2 border-black"
                 style={{ 
                   backdropFilter: 'blur(2px)', 
                   backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  opacity: 1,
-                  cursor: 'url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTkgMTZMMjEgNE0yMSA0TDE5IDZNMjEgNEwxOSA2IiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K") 12 12, auto'
+                  opacity: 1
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
                 onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
