@@ -13,12 +13,13 @@ function QuestionText({
   const currentQ = surveyQuestions[currentQuestion]
   
   return (
-    <h2 className="font-semibold text-black mb-3 flex items-start min-h-[42px]" style={{ 
-      fontSize: '18px', 
-      lineHeight: '24px',
+    <h2 className="font-semibold text-black mb-4 flex items-start min-h-[28px]" style={{ 
+      fontSize: '20px', 
+      lineHeight: '28px',
       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif',
       color: '#1D1D1F',
-      fontWeight: 600
+      fontWeight: 600,
+      letterSpacing: 0.1
     }}>
       {currentQ.question}
     </h2>
@@ -88,18 +89,18 @@ function InteractiveElements({
           onChange={(e) => onInputChange(e.target.value)}
           className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 resize-none mac-input"
           style={{ 
-            outline: 'none', 
-            color: '#1D1D1F', 
-            fontSize: '16px', 
-            lineHeight: '21px',
+            outline: 'none',
+            color: '#1D1D1F',
+            fontSize: '15px',
+            lineHeight: '22px',
             backgroundColor: 'rgba(255,255,255,0.95)',
             border: '1px solid rgba(0,0,0,0.12)',
-            borderRadius: '8px',
+            borderRadius: '10px',
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
             boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
             transition: 'all 0.2s ease'
           }}
-          rows={4}
+          rows={5}
           placeholder="Type here..."
         />
       ) : (
@@ -153,11 +154,11 @@ function InteractiveElements({
               placeholder="Please specify..."
               className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 mac-input"
               style={{ 
-                outline: 'none', 
+                outline: 'none',
                 color: '#1D1D1F',
                 backgroundColor: 'rgba(255,255,255,0.95)',
                 border: '1px solid rgba(0,0,0,0.12)',
-                borderRadius: '8px',
+                borderRadius: '10px',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
                 boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
                 transition: 'all 0.2s ease'
@@ -287,39 +288,10 @@ export default function Home() {
               </div>
               
               <div className="absolute top-3 left-3 z-10">
-                <div style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  padding: '4px 10px',
-                  background: 'rgba(255,255,255,0.85)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                  borderRadius: 9999,
-                  boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
-                  backdropFilter: 'blur(12px) saturate(180%)'
-                }}>
-                  <span style={{
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                    fontVariantNumeric: 'tabular-nums',
-                    fontSize: 12,
-                    lineHeight: '16px',
-                    color: '#1D1D1F',
-                    fontWeight: 600,
-                    letterSpacing: 0.4
-                  }}>{(currentQuestion + 1).toString().padStart(2, '0')}</span>
-                  <span style={{
-                    width: 1,
-                    height: 12,
-                    background: 'rgba(0,0,0,0.08)'
-                  }} />
-                  <span style={{
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                    fontVariantNumeric: 'tabular-nums',
-                    fontSize: 12,
-                    lineHeight: '16px',
-                    color: 'rgba(0,0,0,0.6)',
-                    fontWeight: 600
-                  }}>10</span>
+                <div className="mac-pill">
+                  <span className="num">{(currentQuestion + 1).toString().padStart(2, '0')}</span>
+                  <span className="divider" />
+                  <span className="total">10</span>
                 </div>
               </div>
               
@@ -390,7 +362,7 @@ export default function Home() {
                   e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.04)'
                 }}
             >
-              <span>←</span>
+              <span aria-hidden>←</span>
             </button>
 
             {currentQuestion === 9 ? (
@@ -419,7 +391,7 @@ export default function Home() {
                   e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.04)'
                 }}
               >
-                <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
+                <span>{isSubmitting ? 'Submitting…' : 'Submit'}</span>
               </button>
             ) : (
               <button
@@ -446,7 +418,7 @@ export default function Home() {
                   e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.04)'
                 }}
               >
-                <span>→</span>
+                <span aria-hidden>→</span>
               </button>
             )}
           </div>

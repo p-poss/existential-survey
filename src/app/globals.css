@@ -39,9 +39,10 @@ html, body {
   color: #1D1D1F;
   background-color: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
   transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 12px 14px;
 }
 
 .mac-input::placeholder {
@@ -54,3 +55,54 @@ html, body {
   border-color: rgba(0, 0, 0, 0.18);
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06) inset;
 }
+
+/* Modern macOS neutral button */
+.mac-button {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  color: #1D1D1F;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mac-button:hover {
+  background-color: rgba(248, 248, 248, 0.95);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.mac-button:disabled {
+  color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(245, 245, 247, 0.8);
+}
+
+/* Counter pill */
+.mac-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+}
+
+.mac-pill .num,
+.mac-pill .total {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.mac-pill .num { color: #1D1D1F; letter-spacing: 0.4px; }
+.mac-pill .divider { width: 1px; height: 12px; background: rgba(0,0,0,0.08); }
+.mac-pill .total { color: rgba(0,0,0,0.6); }
