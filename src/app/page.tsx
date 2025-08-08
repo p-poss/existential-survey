@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import ContentAreaVideo from "@/components/ContentAreaVideo"
-import NoiseOverlay from "@/components/NoiseOverlay"
 import { surveyQuestions } from '@/data/questions'
 
 // Question Text Component
@@ -45,11 +44,10 @@ function InteractiveElements({
         <textarea
           value={formData[fieldName] || ''}
           onChange={(e) => onInputChange(e.target.value)}
-          className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 resize-none bg-transparent"
-          style={{ outline: 'none', color: 'black', fontSize: '16px', lineHeight: '21px' }}
           className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 resize-none bg-transparent [&::placeholder]:text-black/50"
+          style={{ outline: 'none', color: 'black', fontSize: '16px', lineHeight: '21px' }}
           rows={4}
-                      placeholder="Type here..."
+          placeholder="Type here..."
         />
       ) : (
         <div className="space-y-3">
