@@ -223,11 +223,14 @@ export default function Home() {
             <button
               onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
               disabled={currentQuestion === 0}
-              className="flex items-center justify-center space-x-2 w-1/2 px-6 py-2 text-black disabled:opacity-50 disabled:cursor-no-drop cursor-pointer border-2 border-black"
+              className="flex items-center justify-center space-x-2 w-1/2 px-6 py-2 text-black disabled:opacity-50 cursor-pointer border-2 border-black"
               style={{ 
                 backdropFilter: 'blur(2px)', 
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                opacity: 1
+                opacity: 1,
+                cursor: currentQuestion === 0 
+                  ? 'url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4IDZMMTggMThNMTggMThMMTggNk0xOCAxOEw2IDE4TTE4IDE4TDE4Nk0xOCA2TDYgNk0xOCA2TDE4IDZNMTAgMTBMMTQgMTRNMTAgMTRMMTQgMTAiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=") 12 12, auto'
+                  : 'pointer'
               }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
               onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
