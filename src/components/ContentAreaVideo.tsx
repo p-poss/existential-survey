@@ -11,6 +11,7 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   const [lastQuestion, setLastQuestion] = useState(questionNumber)
   const videoRefs = useRef<{ [key: number]: HTMLVideoElement | null }>({})
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set())
+  const [readyVideos, setReadyVideos] = useState<Set<number>>(new Set())
 
   // Video sources mapping
   const videoSources = {
@@ -87,8 +88,16 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
         autoPlay
         muted
         loop
+        preload="auto"
         playsInline
         className={`w-full h-full object-cover ${isCurrentVideo ? 'block' : 'hidden'}`}
+        style={{
+          opacity: readyVideos.has(videoNum) ? 1 : 0,
+          transition: 'opacity 180ms ease-out'
+        }}
+        onCanPlay={() => {
+          setReadyVideos(prev => new Set(prev).add(videoNum))
+        }}
         onTimeUpdate={() => handleTimeUpdate(videoNum)}
       >
         <source src={videoSources[videoNum as keyof typeof videoSources]} type="video/mp4" />
@@ -97,7 +106,7 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   }
 
   return (
-    <div className="w-full max-w-[800px] h-full overflow-hidden">
+    <div className="w-full max-w-[800px] h-full overflow-hidden" style={{ backgroundColor: '#000' }}>
       {Array.from({ length: 10 }, (_, i) => i + 1).map(videoNum => 
         createVideoElement(videoNum)
       )}
