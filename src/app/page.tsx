@@ -189,6 +189,7 @@ export default function Home() {
   const [formData, setFormData] = useState<FormData>({})
   const [startTime] = useState(Date.now())
   const [isWindowOpen, setIsWindowOpen] = useState(false)
+  const [isIconSelected, setIsIconSelected] = useState(false)
   const iconRef = useRef<HTMLDivElement | null>(null)
 
   // Keyboard navigation
@@ -211,6 +212,18 @@ export default function Home() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentQuestion, isWindowOpen])
+
+  // Deselect icon when clicking outside the icon area
+  useEffect(() => {
+    const handleDocumentMouseDown = (event: MouseEvent) => {
+      if (!iconRef.current) return
+      if (!iconRef.current.contains(event.target as Node)) {
+        setIsIconSelected(false)
+      }
+    }
+    document.addEventListener('mousedown', handleDocumentMouseDown)
+    return () => document.removeEventListener('mousedown', handleDocumentMouseDown)
+  }, [])
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -268,9 +281,7 @@ export default function Home() {
   }
 
   return (
-    <main className="h-[100dvh] w-full" style={{
-      background: 'linear-gradient(180deg, #F5F5F7 0%, #E8E8ED 100%)'
-    }}>
+    <main className="h-[100dvh] w-full">
       <div className="relative w-full h-full">
         {/* Desktop icon always present and centered */}
         <div
@@ -278,8 +289,10 @@ export default function Home() {
           role="button"
           tabIndex={0}
           aria-label="Open Anonymous Survey"
-          onDoubleClick={() => setIsWindowOpen(true)}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setIsWindowOpen(true) } }}
+          aria-selected={isIconSelected}
+          onClick={() => setIsIconSelected(true)}
+          onDoubleClick={() => { setIsIconSelected(false); setIsWindowOpen(true) }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setIsIconSelected(false); setIsWindowOpen(true) } }}
           style={{
             position: 'absolute',
             left: '50%',
@@ -296,25 +309,32 @@ export default function Home() {
           }}
         >
           <div style={{
-            width: 96,
-            height: 96,
+            width: 80,
+            height: 80,
             display: 'grid',
             placeItems: 'center',
-            borderRadius: 12,
-            transition: 'transform 0.15s ease',
+            borderRadius: 2,
+            transition: 'transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease',
+            backgroundColor: isIconSelected ? 'rgba(0,0,0,0.20)' : 'transparent',
+            // Single outline ring only when selected (no inner stroke)
+            boxShadow: isIconSelected ? '0 0 0 2px rgba(60,60,67,0.32)' : 'none',
           }}>
-            <img src="/file.svg" alt="Anonymous Survey file icon" width={72} height={72} />
+            <img src="/file.png" alt="Anonymous Survey file icon" width={72} height={72} />
           </div>
           <div style={{
-            marginTop: 8,
-            padding: '2px 6px',
+            marginTop: 3,
+            padding: '2px 8px',
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
             fontSize: 12,
             lineHeight: '16px',
-            color: '#FFFFFF',
+            color: isIconSelected ? '#FFFFFF' : '#FFFFFF',
             fontWeight: 600,
-            textShadow: '0 1px 2px rgba(0,0,0,0.6)',
-            textAlign: 'center'
+            textShadow: isIconSelected ? 'none' : '0 1px 2px rgba(0,0,0,0.6)',
+            textAlign: 'center',
+            background: isIconSelected ? 'rgba(60,60,67,0.48)' : 'transparent',
+            borderRadius: 2,
+            // No border/outline around label highlight; background only
+            boxShadow: 'none'
           }}>Anonymous Survey</div>
         </div>
 
@@ -334,10 +354,14 @@ export default function Home() {
               zIndex: 2
             }}>
               <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
+                initial={{ opacity: 0, scale: 0.92, filter: 'blur(6px)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, scale: 0.96, filter: 'blur(6px)' }}
+                transition={{
+                  default: { type: 'spring', stiffness: 380, damping: 28, mass: 0.9 },
+                  opacity: { duration: 0.18, ease: 'easeOut' },
+                  filter: { duration: 0.22, ease: 'easeOut' }
+                }}
                 className="flex flex-col shadow-2xl"
                 style={{
                   width: '100%',
@@ -347,7 +371,8 @@ export default function Home() {
                   background: 'rgba(255,255,255,0.8)',
                   backdropFilter: 'blur(20px) saturate(180%)',
                   boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  transformOrigin: 'center center'
                 }}
               >
                 <TitleBar onClose={() => setIsWindowOpen(false)} />
@@ -408,8 +433,6 @@ export default function Home() {
         {/* Chunk 4: Navigation buttons at bottom */}
         <div className="mt-auto" style={{
           background: 'rgba(255,255,255,0.95)',
-          borderBottomLeftRadius: 12,
-          borderBottomRightRadius: 12,
           padding: '12px'
         }}>
           <div className="w-full flex gap-3">
@@ -499,19 +522,7 @@ export default function Home() {
                 <span aria-hidden>→</span>
               </button>
             )}
-          </div>
-                </div>
-                {/* Chunk 4: Navigation buttons at bottom */}
-                <div className="mt-auto" style={{
-                  background: 'rgba(255,255,255,0.95)',
-                  borderBottomLeftRadius: 12,
-                  borderBottomRightRadius: 12,
-                  padding: '12px'
-                }}>
-                  <div className="w-full flex gap-3">
-                    {/* buttons remain unchanged */}
-                    
-                  </div>
+        </div>
                 </div>
               </motion.div>
             </div>
