@@ -26,7 +26,7 @@ function QuestionContent({
   
   return (
     <div>
-      <h2 className="text-lg font-semibold text-black mb-6">
+      <h2 className="text-lg font-semibold text-black mb-6 min-h-[3.375rem] flex items-start">
         {currentQ.question}
       </h2>
       <div>
