@@ -223,7 +223,7 @@ export default function Home() {
             <button
               onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
               disabled={currentQuestion === 0}
-              className="flex items-center justify-center space-x-2 w-1/2 px-6 py-2 text-black disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border-2 border-black"
+              className="flex items-center justify-center space-x-2 w-1/2 px-6 py-2 text-black disabled:opacity-50 disabled:cursor-no-drop cursor-pointer border-2 border-black"
               style={{ 
                 backdropFilter: 'blur(2px)', 
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
