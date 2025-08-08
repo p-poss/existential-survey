@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import ContentAreaVideo from "@/components/ContentAreaVideo"
 import { surveyQuestions } from '@/data/questions'
 
@@ -27,7 +28,7 @@ function QuestionText({
 }
 
 // Title Bar Component (modern macOS style)
-function TitleBar() {
+function TitleBar({ onClose }: { onClose: () => void }) {
   return (
     <div className="flex items-center" style={{
       height: 36,
@@ -41,9 +42,12 @@ function TitleBar() {
     }}>
       {/* Traffic lights */}
       <div className="flex items-center gap-2">
-        <span style={{width: 12, height: 12, borderRadius: 9999, background: '#FF5F57', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)'}} />
-        <span style={{width: 12, height: 12, borderRadius: 9999, background: '#FEBC2E', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)'}} />
-        <span style={{width: 12, height: 12, borderRadius: 9999, background: '#28C840', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)'}} />
+        <button aria-label="Close window" onClick={onClose} style={{
+          width: 12, height: 12, borderRadius: 9999, background: '#FF5F57', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)',
+          display: 'inline-block'
+        }} />
+        <span aria-disabled="true" title="Minimize disabled" style={{width: 12, height: 12, borderRadius: 9999, background: '#FEBC2E', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)', opacity: 0.4, pointerEvents: 'none'}} />
+        <span aria-disabled="true" title="Zoom disabled" style={{width: 12, height: 12, borderRadius: 9999, background: '#28C840', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)', opacity: 0.4, pointerEvents: 'none'}} />
       </div>
       {/* Center title */}
       <div className="flex-1 flex justify-center">
@@ -184,10 +188,13 @@ export default function Home() {
   const [isComplete, setIsComplete] = useState(false)
   const [formData, setFormData] = useState<FormData>({})
   const [startTime] = useState(Date.now())
+  const [isWindowOpen, setIsWindowOpen] = useState(false)
+  const iconRef = useRef<HTMLDivElement | null>(null)
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (!isWindowOpen) return
       if (event.key === 'ArrowLeft') {
         event.preventDefault()
         if (currentQuestion > 0) {
@@ -203,7 +210,7 @@ export default function Home() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [currentQuestion])
+  }, [currentQuestion, isWindowOpen])
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -247,7 +254,7 @@ export default function Home() {
           boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
           overflow: 'hidden'
         }}>
-          <TitleBar />
+          <TitleBar onClose={() => setIsWindowOpen(false)} />
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <h2 className="font-semibold text-black" style={{ fontSize: '16px', lineHeight: '21px' }}>
@@ -264,18 +271,71 @@ export default function Home() {
     <main className="h-[100dvh] w-full flex items-center justify-center" style={{
       background: 'linear-gradient(180deg, #F5F5F7 0%, #E8E8ED 100%)'
     }}>
-      <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto shadow-2xl" style={{
-        border: '1px solid rgba(0,0,0,0.1)',
-        borderRadius: '12px',
-        background: 'rgba(255,255,255,0.8)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
-        overflow: 'hidden'
-      }}>
-        <TitleBar />
-        <div className="flex-1 flex flex-col min-h-0 overflow-y-auto" style={{
-          background: 'rgba(255,255,255,0.95)'
-        }}>
+      {/* Desktop icon when window is closed */}
+      {!isWindowOpen && (
+        <div
+          ref={iconRef}
+          role="button"
+          tabIndex={0}
+          aria-label="Open Anonymous Survey"
+          onDoubleClick={() => setIsWindowOpen(true)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setIsWindowOpen(true) } }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'default',
+            userSelect: 'none'
+          }}
+        >
+          <div style={{
+            width: 96,
+            height: 96,
+            display: 'grid',
+            placeItems: 'center',
+            borderRadius: 12,
+            transition: 'transform 0.15s ease',
+          }}>
+            <img src="/file.svg" alt="Anonymous Survey file icon" width={72} height={72} />
+          </div>
+          <div style={{
+            marginTop: 8,
+            padding: '2px 8px',
+            borderRadius: 6,
+            background: 'rgba(255,255,255,0.6)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+            fontSize: 12,
+            lineHeight: '16px',
+            color: '#1D1D1F',
+            boxShadow: '0 0 0 1px rgba(0,0,0,0.04)'
+          }}>Anonymous Survey</div>
+        </div>
+      )}
+
+      {/* Window when open */}
+      <AnimatePresence>
+        {isWindowOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto shadow-2xl"
+            style={{
+              border: '1px solid rgba(0,0,0,0.1)',
+              borderRadius: '12px',
+              background: 'rgba(255,255,255,0.8)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
+              overflow: 'hidden'
+            }}
+          >
+            <TitleBar onClose={() => setIsWindowOpen(false)} />
+            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto" style={{
+              background: 'rgba(255,255,255,0.95)'
+            }}>
           {/* Content container */}
           <div className="w-full flex flex-col flex-1">
             {/* Chunk 1: Video area with number and noise */}
@@ -423,7 +483,9 @@ export default function Home() {
             )}
           </div>
         </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }
