@@ -179,7 +179,7 @@ export default function Home() {
           {/* Content container */}
           <div className="w-full flex flex-col flex-1">
             {/* Chunk 1: Video area with number and noise */}
-            <div className="h-[200px] relative z-20 border-b-2 border-black">
+            <div className="h-[300px] relative z-20 border-b-2 border-black">
               <div className="absolute inset-0 overflow-hidden">
                 <ContentAreaVideo questionNumber={currentQuestion + 1} />
               </div>
