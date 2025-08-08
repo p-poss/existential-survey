@@ -14,6 +14,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden
+          className="fixed inset-0 w-full h-full object-cover z-0 pointer-events-none"
+        >
+          <source src="https://poss.b-cdn.net/flower-test.mp4" type="video/mp4" />
+        </video>
         {children}
       </body>
     </html>

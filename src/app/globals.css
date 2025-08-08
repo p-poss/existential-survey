@@ -24,12 +24,12 @@ html, body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  background: var(--background);
+  background: transparent;
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-#__next {
+#__next, body > div:first-child {
   height: 100%;
   overflow: hidden;
 }
