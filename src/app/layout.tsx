@@ -22,7 +22,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div id="bg-root" className="fixed inset-0 z-0 pointer-events-none" aria-hidden>
-          <div className="relative w-[100vw] h-[100dvh]">
+          <div
+            className="relative w-[100vw]"
+            style={{
+              // Extend behind iOS Safari notch: move up by safe-area and increase height
+              marginTop: 'calc(-1 * env(safe-area-inset-top))',
+              height: 'calc(100dvh + env(safe-area-inset-top))',
+            }}
+          >
             <Image
               src="/bg.jpg"
               alt=""
@@ -34,16 +41,7 @@ export default function RootLayout({
             />
           </div>
         </div>
-        {/* Fill the iOS Safari notch/status bar area with a solid color when video can't reach */}
-        <div
-          aria-hidden
-          className="fixed left-0 right-0 z-[1] pointer-events-none"
-          style={{
-            top: 0,
-            height: 'env(safe-area-inset-top)',
-            background: '#626262',
-          }}
-        />
+        
         {children}
       </body>
     </html>
