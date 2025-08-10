@@ -13,6 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      </head>
       <body>
         <video
           autoPlay
@@ -20,7 +23,7 @@ export default function RootLayout({
           loop
           playsInline
           aria-hidden
-          className="fixed inset-0 w-full h-full object-cover z-0 pointer-events-none"
+          className="fixed inset-0 w-[100vw] h-[100dvh] object-cover z-0 pointer-events-none"
         >
           <source src="https://poss.b-cdn.net/flower-test.mp4" type="video/mp4" />
         </video>
