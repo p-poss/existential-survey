@@ -112,3 +112,25 @@ html, body {
 .strobe-invert {
   filter: invert(100%);
 }
+
+/* Mac OS 8 style patterned background (embossed logo grid effect) */
+.os8-pattern {
+  background-color: #7b88b8;
+  background-image:
+    radial-gradient(circle at 2px 2px, rgba(255,255,255,0.28) 0, rgba(255,255,255,0.28) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,0.065) 0%, rgba(0,0,0,0.08) 100%),
+    radial-gradient(circle at 26px 18px, rgba(0,0,0,0.20) 0, rgba(0,0,0,0.20) 6px, transparent 6px),
+    radial-gradient(circle at 30px 14px, rgba(255,255,255,0.36) 0, rgba(255,255,255,0.36) 6px, transparent 6px);
+  background-size:
+    32px 32px,
+    100% 100%,
+    96px 96px,
+    96px 96px;
+  background-blend-mode: normal, overlay, normal, normal;
+  filter: saturate(95%);
+}
+
+/* Ensure invert wins when toggled alongside os8-pattern */
+.os8-pattern.strobe-invert {
+  filter: invert(100%) saturate(95%);
+}
