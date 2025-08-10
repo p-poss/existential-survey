@@ -14,13 +14,14 @@ function QuestionText({
   const currentQ = surveyQuestions[currentQuestion]
   
   return (
-    <h2 className="font-semibold text-black mb-4 flex items-start min-h-[28px]" style={{ 
-      fontSize: '20px', 
-      lineHeight: '28px',
+    <h2 className="font-semibold text-black mb-4 flex items-start" style={{ 
+      fontSize: '15px', 
+      lineHeight: '22px',
       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif',
       color: '#1D1D1F',
       fontWeight: 600,
-      letterSpacing: 0.1
+      letterSpacing: 0.1,
+      minHeight: '44px'
     }}>
       {currentQ.question}
     </h2>
@@ -259,7 +260,7 @@ export default function Home() {
       <main className="h-[100dvh] w-full flex items-center justify-center" style={{
         background: 'linear-gradient(180deg, #F5F5F7 0%, #E8E8ED 100%)'
       }}>
-        <div className="w-[calc(100vw-32px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto shadow-2xl" style={{
+        <div className="w-[calc(100vw-64px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto shadow-2xl" style={{
           border: '1px solid rgba(0,0,0,0.1)',
           borderRadius: '12px',
           background: 'rgba(255,255,255,0.8)',
@@ -346,7 +347,7 @@ export default function Home() {
               left: '50%',
               top: '50%',
               transform: 'translate(-50%, -50%)',
-              width: 'calc(100vw - 32px)',
+              width: 'calc(100vw - 64px)',
               maxWidth: 800,
               height: 800,
               maxHeight: 'calc(100dvh - 32px)',
@@ -433,7 +434,8 @@ export default function Home() {
         {/* Chunk 4: Navigation buttons at bottom */}
         <div className="mt-auto" style={{
           background: 'rgba(255,255,255,0.95)',
-          padding: '12px'
+          padding: '12px',
+          borderTop: '1px solid rgba(0,0,0,0.06)'
         }}>
           <div className="w-full flex gap-3">
             <button
