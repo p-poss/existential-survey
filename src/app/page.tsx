@@ -57,7 +57,7 @@ function TitleBar({ onClose }: { onClose: () => void }) {
           fontWeight: 600,
           color: '#3A3A3C',
           letterSpacing: 0.2
-        }}>...Contemplate Before We Die</div>
+        }}>...Before We Die</div>
       </div>
       {/* Right side spacer */}
       <div style={{width: 60}} />
