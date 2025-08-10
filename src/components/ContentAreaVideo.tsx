@@ -25,12 +25,13 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
     8: 'https://poss.b-cdn.net/forest-foundry-preview.mp4',
     9: 'https://poss.b-cdn.net/vapor-punch.mp4',
     10: 'https://poss.b-cdn.net/courtside-hero.mp4',
-    11: 'https://poss.b-cdn.net/subambient-preview.mp4' // reuse Q3 source
+    11: 'https://poss.b-cdn.net/subambient-preview.mp4', // reuse Q3 source
+    12: 'https://poss.b-cdn.net/puffco-peak-clear-preview.mp4' // reuse Q5 source
   }
 
   // Calculate video range (±2 from current question)
   const minVideo = Math.max(1, questionNumber - 2)
-  const maxVideo = Math.min(11, questionNumber + 2)
+  const maxVideo = Math.min(12, questionNumber + 2)
   const currentVideoSource = videoSources[questionNumber as keyof typeof videoSources] || videoSources[1]
 
   // Handle video time updates
@@ -108,7 +109,7 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
 
   return (
     <div className="w-full max-w-[800px] h-full overflow-hidden" style={{ backgroundColor: '#000' }}>
-      {Array.from({ length: 11 }, (_, i) => i + 1).map(videoNum => 
+      {Array.from({ length: 12 }, (_, i) => i + 1).map(videoNum => 
         createVideoElement(videoNum)
       )}
     </div>
