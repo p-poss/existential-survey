@@ -260,7 +260,7 @@ export default function Home() {
       <main className="h-[100dvh] w-full flex items-center justify-center" style={{
         background: 'linear-gradient(180deg, #F5F5F7 0%, #E8E8ED 100%)'
       }}>
-        <div className="w-[calc(100vw-64px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-32px)] min-h-0 flex flex-col mx-auto shadow-2xl" style={{
+        <div className="w-[calc(100vw-56px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-56px)] min-h-0 flex flex-col mx-auto shadow-2xl" style={{
           border: '1px solid rgba(0,0,0,0.1)',
           borderRadius: '12px',
           background: 'rgba(255,255,255,0.8)',
@@ -347,10 +347,10 @@ export default function Home() {
               left: '50%',
               top: '50%',
               transform: 'translate(-50%, -50%)',
-              width: 'calc(100vw - 64px)',
+              width: 'calc(100vw - 56px)',
               maxWidth: 800,
               height: 800,
-              maxHeight: 'calc(100dvh - 32px)',
+              maxHeight: 'calc(100dvh - 56px)',
               minHeight: 0,
               zIndex: 2
             }}>
@@ -383,7 +383,7 @@ export default function Home() {
           {/* Content container */}
           <div className="w-full flex flex-col flex-1">
             {/* Chunk 1: Video area with number and noise */}
-            <div className="h-[300px] relative z-20" style={{
+            <div className="h-[200px] relative z-20" style={{
               borderBottom: '1px solid rgba(0,0,0,0.06)',
               background: 'rgba(248,248,248,0.8)'
             }}>
