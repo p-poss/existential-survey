@@ -203,8 +203,11 @@ export default function Home() {
   const ensureCtx = (): AudioContext | null => {
     try {
       if (!audioCtxRef.current) {
-        const W = window as Window & { webkitAudioContext?: typeof AudioContext }
-        const AC = W.AudioContext ?? W.webkitAudioContext
+        const G = globalThis as unknown as {
+          AudioContext?: typeof AudioContext
+          webkitAudioContext?: typeof AudioContext
+        }
+        const AC = G.AudioContext ?? G.webkitAudioContext
         if (!AC) return null
         audioCtxRef.current = new AC()
       }
