@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Image from "next/image";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,16 +21,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden
-          className="fixed inset-0 w-[100vw] h-[100dvh] object-cover z-0 pointer-events-none"
-        >
-          <source src="https://poss.b-cdn.net/flower-test.mp4" type="video/mp4" />
-        </video>
+        <div id="bg-root" className="fixed inset-0 z-0 pointer-events-none" aria-hidden>
+          <div className="relative w-[100vw] h-[100dvh]">
+            <Image
+              src="/bg.jpg"
+              alt=""
+              fill
+              priority
+              loading="eager"
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
         {/* Fill the iOS Safari notch/status bar area with a solid color when video can't reach */}
         <div
           aria-hidden

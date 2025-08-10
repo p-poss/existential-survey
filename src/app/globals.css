@@ -107,3 +107,8 @@ html, body {
 .mac-pill .num { color: #1D1D1F; letter-spacing: 0.4px; }
 .mac-pill .divider { width: 1px; height: 12px; background: rgba(0,0,0,0.08); }
 .mac-pill .total { color: rgba(0,0,0,0.6); }
+
+/* Strobe invert class toggled during celebration */
+.strobe-invert {
+  filter: invert(100%);
+}

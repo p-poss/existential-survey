@@ -198,8 +198,17 @@ export default function Home() {
   const [startTime] = useState(Date.now())
   const [isWindowOpen, setIsWindowOpen] = useState(false)
   const [isIconSelected, setIsIconSelected] = useState(false)
+  const [isCelebrating, setIsCelebrating] = useState(false)
   const iconRef = useRef<HTMLDivElement | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
+  const musicRef = useRef<{
+    intervalId?: number
+    strobeId?: number
+    gain?: GainNode
+    filter?: BiquadFilterNode
+    pan?: StereoPannerNode
+    oscs?: OscillatorNode[]
+  } | null>(null)
 
   const ensureCtx = (): AudioContext | null => {
     try {
@@ -334,6 +343,85 @@ export default function Home() {
     src.stop(now + duration + 0.02)
   }
 
+  const stopCelebrationMusic = () => {
+    const current = musicRef.current
+    if (!current) return
+    if (current.intervalId) {
+      window.clearInterval(current.intervalId)
+    }
+    if (current.strobeId) {
+      window.clearInterval(current.strobeId)
+    }
+    current.oscs?.forEach(osc => {
+      try { osc.stop(); } catch {}
+      try { osc.disconnect(); } catch {}
+    })
+    try { current.filter?.disconnect(); } catch {}
+    try { current.gain?.disconnect(); } catch {}
+    try { current.pan?.disconnect(); } catch {}
+    // Ensure strobe is cleared
+    try {
+      const bg = document.getElementById('bg-root')
+      if (bg) bg.classList.remove('strobe-invert')
+    } catch {}
+    musicRef.current = null
+  }
+
+  const startCelebrationMusic = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    stopCelebrationMusic()
+
+    const gain = ctx.createGain()
+    gain.gain.value = 0.06
+
+    const filter = ctx.createBiquadFilter()
+    filter.type = 'lowpass'
+    filter.frequency.value = 1800
+
+    const pan = ctx.createStereoPanner()
+    pan.pan.value = 0
+
+    const notesHz = [220, 262, 294, 330, 392, 440]
+    const pattern = [0, 2, 1, 3, 4, 2, 5, 3]
+    let step = 0
+
+    const osc1 = ctx.createOscillator()
+    const osc2 = ctx.createOscillator()
+    osc1.type = 'square'
+    osc2.type = 'square'
+    osc1.detune.value = -6
+    osc2.detune.value = +6
+
+    osc1.connect(filter)
+    osc2.connect(filter)
+    filter.connect(gain).connect(pan).connect(ctx.destination)
+
+    const setFrequencies = () => {
+      const base = notesHz[pattern[step % pattern.length]]
+      osc1.frequency.setTargetAtTime(base, ctx.currentTime, 0.01)
+      osc2.frequency.setTargetAtTime(base * 2, ctx.currentTime, 0.01)
+      const p = Math.sin(step / 4) * 0.4
+      pan.pan.setTargetAtTime(p, ctx.currentTime, 0.05)
+      step += 1
+    }
+
+    setFrequencies()
+    osc1.start()
+    osc2.start()
+
+    const intervalId = window.setInterval(setFrequencies, 260)
+    // Immediately toggle strobe once, then every 300ms
+    const bg = document.getElementById('bg-root')
+    if (bg) bg.classList.toggle('strobe-invert')
+    const strobeId = window.setInterval(() => {
+      const el = document.getElementById('bg-root')
+      if (!el) return
+      el.classList.toggle('strobe-invert')
+    }, 400)
+    musicRef.current = { intervalId, strobeId, gain, filter, pan, oscs: [osc1, osc2] }
+  }
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -354,6 +442,17 @@ export default function Home() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentQuestion, isWindowOpen])
+
+  // Stop music if window closes or completion view exits
+  useEffect(() => {
+    if (!isWindowOpen || !isComplete) {
+      if (isCelebrating) {
+        setIsCelebrating(false)
+      }
+      stopCelebrationMusic()
+    }
+    return () => stopCelebrationMusic()
+  }, [isWindowOpen, isComplete])
 
   // Deselect icon when clicking outside the icon area
   useEffect(() => {
@@ -586,8 +685,16 @@ export default function Home() {
           {isComplete ? (
             <div className="w-full">
               <button
+                type="button"
                 className="w-full flex items-center justify-center px-6 py-2 cursor-pointer"
                 onPointerDown={playSubmitClick}
+                onClick={() => {
+                  setIsCelebrating(prev => {
+                    const next = !prev
+                    if (next) startCelebrationMusic(); else stopCelebrationMusic()
+                    return next
+                  })
+                }}
                 style={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   border: '1px solid rgba(0, 0, 0, 0.12)',
@@ -601,7 +708,7 @@ export default function Home() {
                   transition: 'all 0.2s ease'
                 }}
               >
-                Let’s Celebrate
+                {isCelebrating ? 'Stop The Party' : 'Let\u2019s Celebrate'}
               </button>
             </div>
           ) : (
