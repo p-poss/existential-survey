@@ -203,7 +203,10 @@ export default function Home() {
   const ensureCtx = (): AudioContext | null => {
     try {
       if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+        const W = window as Window & { webkitAudioContext?: typeof AudioContext }
+        const AC = W.AudioContext ?? W.webkitAudioContext
+        if (!AC) return null
+        audioCtxRef.current = new AC()
       }
       const ctx = audioCtxRef.current
       if (!ctx) return null
@@ -424,7 +427,7 @@ export default function Home() {
           role="button"
           tabIndex={0}
           aria-label="Open Anonymous Survey"
-          aria-selected={isIconSelected}
+          data-selected={isIconSelected}
           onPointerDown={playClick}
           onClick={() => setIsIconSelected(true)}
           onDoubleClick={() => { setIsIconSelected(false); playOpenSwoosh(); setIsWindowOpen(true) }}
