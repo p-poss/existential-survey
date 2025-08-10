@@ -91,26 +91,29 @@ function InteractiveElements({
   return (
     <div>
       {currentQ.type === 'text' ? (
-        <textarea
-          value={formData[fieldName] || ''}
-          onChange={(e) => onInputChange(e.target.value)}
-          className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 resize-none mac-input"
-          style={{ 
-            outline: 'none',
-            color: '#1D1D1F',
-            fontSize: '15px',
-            lineHeight: '22px',
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            border: '1px solid rgba(0,0,0,0.12)',
-            borderRadius: '10px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-            boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
-            transition: 'all 0.2s ease'
-          }}
-          onFocus={onWriteInFocus}
-          rows={5}
-          placeholder="Type here..."
-        />
+        <div className="relative h-12">
+          <div className="absolute top-0 inset-x-0">
+            <input
+              type="text"
+              value={formData[fieldName] || ''}
+              onChange={(e) => onInputChange(e.target.value)}
+              placeholder="Type here..."
+              className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 mac-input"
+              style={{ 
+                outline: 'none',
+                color: '#1D1D1F',
+                backgroundColor: 'rgba(255,255,255,0.95)',
+                border: '1px solid rgba(0,0,0,0.12)',
+                borderRadius: '10px',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+                boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
+                transition: 'all 0.2s ease'
+              }}
+              onFocus={onWriteInFocus}
+              autoComplete="off"
+            />
+          </div>
+        </div>
       ) : (
         <div className="space-y-3">
           {currentQ.options?.map((option, index) => (
@@ -393,31 +396,7 @@ export default function Home() {
     }
   }
 
-  if (isComplete) {
-    return (
-      <main className="h-[100dvh] w-full flex items-center justify-center" style={{
-        background: 'linear-gradient(180deg, #F5F5F7 0%, #E8E8ED 100%)'
-      }}>
-        <div className="w-[calc(100vw-56px)] max-w-[800px] h-[800px] max-h-[calc(100dvh-56px)] min-h-0 flex flex-col mx-auto shadow-2xl" style={{
-          border: '1px solid rgba(0,0,0,0.1)',
-          borderRadius: '12px',
-          background: 'rgba(255,255,255,0.8)',
-          backdropFilter: 'blur(20px) saturate(180%)',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
-          overflow: 'hidden'
-        }}>
-          <TitleBar onClose={() => setIsWindowOpen(false)} />
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="font-semibold text-black" style={{ fontSize: '16px', lineHeight: '21px' }}>
-                Responses submitted anonymously.
-              </h2>
-            </div>
-          </div>
-        </div>
-      </main>
-    )
-  }
+  // When complete, keep rendering the same window structure
 
   return (
     <main className="h-[100dvh] w-full">
@@ -524,58 +503,82 @@ export default function Home() {
                 }}>
           {/* Content container */}
           <div className="w-full flex flex-col flex-1">
-            {/* Chunk 1: Video area with number and noise */}
-            <div className="h-[200px] relative z-20" style={{
-              borderBottom: '1px solid rgba(0,0,0,0.06)',
-              background: 'rgba(248,248,248,0.8)'
-            }}>
-              <div className="absolute inset-0 overflow-hidden">
-                <ContentAreaVideo questionNumber={currentQuestion + 1} />
-              </div>
-              
-              <div className="absolute top-3 left-3 z-10">
-                <div className="mac-pill">
-                  <span className="num">{(currentQuestion + 1).toString().padStart(2, '0')}</span>
-                  <span className="divider" />
-                  <span className="total">10</span>
+            {/* Chunk 1: Video area with number and noise (hidden on completion) */}
+            {isComplete ? (
+              <div className="h-[200px]" style={{
+                borderBottom: '1px solid rgba(0,0,0,0.06)',
+                backgroundColor: 'rgba(255,255,255,0.95)'
+              }} />
+            ) : (
+              <div className="h-[200px] relative z-20" style={{
+                borderBottom: '1px solid rgba(0,0,0,0.06)',
+                background: 'rgba(248,248,248,0.8)'
+              }}>
+                <div className="absolute inset-0 overflow-hidden">
+                  <ContentAreaVideo questionNumber={currentQuestion + 1} />
+                </div>
+                
+                <div className="absolute top-3 left-3 z-10">
+                  <div className="mac-pill">
+                    <span className="num">{(currentQuestion + 1).toString().padStart(2, '0')}</span>
+                    <span className="divider" />
+                    <span className="total">10</span>
+                  </div>
                 </div>
               </div>
-              
-
-            </div>
+            )}
             
-            {/* Chunk 2: Question text */}
+            {/* Chunk 2: Question text or completion */}
             <div className="pt-3 px-3" style={{
               borderBottom: '1px solid rgba(0,0,0,0.06)',
               backgroundColor: 'rgba(255,255,255,0.95)'
             }}>
-              <QuestionText currentQuestion={currentQuestion} />
+              {isComplete ? (
+                <h2
+                  className="font-semibold text-black text-center mb-4"
+                  style={{
+                    fontSize: '15px',
+                    lineHeight: '22px',
+                    minHeight: '44px',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif',
+                    color: '#1D1D1F',
+                    letterSpacing: 0.1
+                  }}
+                >
+                  Responses submitted anonymously.
+                </h2>
+              ) : (
+                <QuestionText currentQuestion={currentQuestion} />
+              )}
             </div>
             
-            {/* Chunk 3: Interactive elements */}
-            <div className="pt-3 px-3 mb-3" style={{
-              backgroundColor: 'rgba(255,255,255,0.95)'
-            }}>
-              <InteractiveElements 
-                currentQuestion={currentQuestion}
-                formData={formData}
-                onInputChange={(value, option) => {
-                  const fieldName = `q${surveyQuestions[currentQuestion].id}`
-                  const optionFieldName = `${fieldName}_option`
-                  setFormData(prev => ({
-                    ...prev,
-                    [fieldName]: value,
-                    [optionFieldName]: option || ''
-                  }))
-                }}
-                onRadioClick={playRadioClick}
-                onWriteInFocus={playInputFocus}
-              />
-            </div>
+            {/* Chunk 3: Interactive elements (hidden when complete) */}
+            {!isComplete && (
+              <div className="pt-3 pb-3 px-3 flex-1 flex flex-col min-h-0" style={{
+                backgroundColor: 'rgba(255,255,255,0.95)'
+              }}>
+                <InteractiveElements 
+                  currentQuestion={currentQuestion}
+                  formData={formData}
+                  onInputChange={(value, option) => {
+                    const fieldName = `q${surveyQuestions[currentQuestion].id}`
+                    const optionFieldName = `${fieldName}_option`
+                    setFormData(prev => ({
+                      ...prev,
+                      [fieldName]: value,
+                      [optionFieldName]: option || ''
+                    }))
+                  }}
+                  onRadioClick={playRadioClick}
+                  onWriteInFocus={playInputFocus}
+                />
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Chunk 4: Navigation buttons at bottom */}
+        {/* Chunk 4: Navigation buttons at bottom (hidden when complete) */}
+        {!isComplete && (
         <div className="mt-auto" style={{
           background: 'rgba(255,255,255,0.95)',
           padding: '12px',
@@ -672,7 +675,8 @@ export default function Home() {
               </button>
             )}
         </div>
-                </div>
+        </div>
+        )}
               </motion.div>
             </div>
           )}
