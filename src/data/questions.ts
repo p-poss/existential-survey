@@ -54,13 +54,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: 10,
-    type: 'multiple_choice',
-    question: 'If money weren’t a concern, what would you work on?',
-    options: [
-      'Keep your current career',
-      'Switch careers',
-      'Quit work entirely',
-      'Something else (write in)'
-    ]
+    type: 'text',
+    question: 'If money weren’t a concern, what would you work on?'
   }
 ]
