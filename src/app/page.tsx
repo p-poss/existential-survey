@@ -71,11 +71,15 @@ function TitleBar({ onClose }: { onClose: () => void }) {
 function InteractiveElements({ 
   currentQuestion, 
   formData,
-  onInputChange
+  onInputChange,
+  onRadioClick,
+  onWriteInFocus,
 }: { 
   currentQuestion: number;
   formData: FormData;
   onInputChange: (value: string, option?: string) => void;
+  onRadioClick: () => void;
+  onWriteInFocus: () => void;
 }) {
   const currentQ = surveyQuestions[currentQuestion]
   const fieldName = `q${currentQ.id}`
@@ -111,7 +115,7 @@ function InteractiveElements({
       ) : (
         <div className="space-y-3">
           {currentQ.options?.map((option, index) => (
-            <label key={index} className="flex items-center space-x-3 cursor-pointer">
+            <label key={index} className="flex items-center space-x-3 cursor-pointer" onPointerDown={onRadioClick}>
               <div className="relative" style={{width: 16, height: 16}}>
                 <div 
                   className="rounded-full"
@@ -168,6 +172,7 @@ function InteractiveElements({
                 boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
                 transition: 'all 0.2s ease'
               }}
+              onFocus={onWriteInFocus}
               autoComplete="off"
             />
           </div>
@@ -251,6 +256,22 @@ export default function Home() {
     if (!ctx) return
     blip(ctx, 0.0, 900, 0.07, 0.2, 500)
     blip(ctx, 0.018, 1400, 0.08, 0.16, 600)
+  }
+
+  const playRadioClick = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    // Slightly higher, shorter, crisp tick
+    blip(ctx, 0.0, 1800, 0.035, 0.14)
+    blip(ctx, 0.010, 2400, 0.035, 0.10)
+  }
+
+  const playInputFocus = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    // Softer, lower UI blip for entering write-in field
+    blip(ctx, 0.0, 700, 0.06, 0.12, 400)
+    blip(ctx, 0.015, 1100, 0.06, 0.10, 500)
   }
 
   // Keyboard navigation
@@ -490,6 +511,8 @@ export default function Home() {
                     [optionFieldName]: option || ''
                   }))
                 }}
+                onRadioClick={playRadioClick}
+                onWriteInFocus={playInputFocus}
               />
             </div>
           </div>
