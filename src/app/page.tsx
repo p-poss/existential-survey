@@ -336,7 +336,10 @@ export default function Home() {
             borderRadius: 2,
             // No border/outline around label highlight; background only
             boxShadow: 'none'
-          }}>Anonymous Survey</div>
+          }}>
+            <div>13 Questions To</div>
+            <div>Contem...re We Die</div>
+          </div>
         </div>
 
         {/* Window when open, absolutely centered above icon */}
