@@ -109,6 +109,7 @@ function InteractiveElements({
             boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
             transition: 'all 0.2s ease'
           }}
+          onFocus={onWriteInFocus}
           rows={5}
           placeholder="Type here..."
         />
@@ -274,6 +275,58 @@ export default function Home() {
     blip(ctx, 0.015, 1100, 0.06, 0.10, 500)
   }
 
+  const playOpenSwoosh = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    const duration = 0.35
+    const now = ctx.currentTime
+    // White noise buffer
+    const length = Math.max(1, Math.floor(ctx.sampleRate * duration))
+    const buffer = ctx.createBuffer(1, length, ctx.sampleRate)
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1
+
+    const src = ctx.createBufferSource()
+    src.buffer = buffer
+    const filter = ctx.createBiquadFilter()
+    filter.type = 'lowpass'
+    filter.frequency.setValueAtTime(900, now)
+    filter.frequency.linearRampToValueAtTime(7000, now + duration)
+    const gain = ctx.createGain()
+    gain.gain.setValueAtTime(0.0001, now)
+    gain.gain.exponentialRampToValueAtTime(0.22, now + 0.05)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration)
+    src.connect(filter).connect(gain).connect(ctx.destination)
+    src.start(now)
+    src.stop(now + duration + 0.02)
+  }
+
+  const playCloseSwoosh = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    const duration = 0.28
+    const now = ctx.currentTime
+    const length = Math.max(1, Math.floor(ctx.sampleRate * duration))
+    const buffer = ctx.createBuffer(1, length, ctx.sampleRate)
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1
+
+    const src = ctx.createBufferSource()
+    src.buffer = buffer
+    const filter = ctx.createBiquadFilter()
+    filter.type = 'lowpass'
+    // Start bright then sweep darker for a closing feel
+    filter.frequency.setValueAtTime(8000, now)
+    filter.frequency.linearRampToValueAtTime(900, now + duration)
+    const gain = ctx.createGain()
+    gain.gain.setValueAtTime(0.0001, now)
+    gain.gain.exponentialRampToValueAtTime(0.18, now + 0.035)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration)
+    src.connect(filter).connect(gain).connect(ctx.destination)
+    src.start(now)
+    src.stop(now + duration + 0.02)
+  }
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -374,8 +427,8 @@ export default function Home() {
           aria-selected={isIconSelected}
           onPointerDown={playClick}
           onClick={() => setIsIconSelected(true)}
-          onDoubleClick={() => { setIsIconSelected(false); setIsWindowOpen(true) }}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { playClick(); setIsIconSelected(false); setIsWindowOpen(true) } }}
+          onDoubleClick={() => { setIsIconSelected(false); playOpenSwoosh(); setIsWindowOpen(true) }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { playClick(); playOpenSwoosh(); setIsIconSelected(false); setIsWindowOpen(true) } }}
           style={{
             position: 'absolute',
             left: '50%',
@@ -461,7 +514,7 @@ export default function Home() {
                   transformOrigin: 'center center'
                 }}
               >
-                <TitleBar onClose={() => setIsWindowOpen(false)} />
+                <TitleBar onClose={() => { playCloseSwoosh(); setIsWindowOpen(false) }} />
                 <div className="flex-1 flex flex-col min-h-0 overflow-y-auto" style={{
                   background: 'rgba(255,255,255,0.95)'
                 }}>
