@@ -577,13 +577,34 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Chunk 4: Navigation buttons at bottom (hidden when complete) */}
-        {!isComplete && (
+        {/* Chunk 4: Footer area; single full-width button on completion */}
         <div className="mt-auto" style={{
           background: 'rgba(255,255,255,0.95)',
           padding: '12px',
           borderTop: '1px solid rgba(0,0,0,0.06)'
         }}>
+          {isComplete ? (
+            <div className="w-full">
+              <button
+                className="w-full flex items-center justify-center px-6 py-2 cursor-pointer"
+                onPointerDown={playSubmitClick}
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                  border: '1px solid rgba(0, 0, 0, 0.12)',
+                  borderRadius: '8px',
+                  color: '#1D1D1F',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+                  fontWeight: '500',
+                  fontSize: '16px',
+                  lineHeight: '21px',
+                  boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.04)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                Let’s Celebrate
+              </button>
+            </div>
+          ) : (
           <div className="w-full flex gap-3">
             <button
               onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
@@ -674,9 +695,9 @@ export default function Home() {
                 <span aria-hidden>→</span>
               </button>
             )}
+          </div>
+          )}
         </div>
-        </div>
-        )}
               </motion.div>
             </div>
           )}
