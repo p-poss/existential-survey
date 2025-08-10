@@ -25,7 +25,7 @@ html, body {
   height: 100%;
   min-height: 100dvh;
   overflow: hidden;
-  background: transparent;
+  background: #575757;
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
 }
