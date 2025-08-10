@@ -4,10 +4,6 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Anonymous Survey", 
   description: "A design research experiment exploring anonymous existential thoughts",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#626262" },
-    { media: "(prefers-color-scheme: dark)", color: "#626262" },
-  ],
 };
 
 export const viewport: Viewport = {
