@@ -66,5 +66,10 @@ export const surveyQuestions: SurveyQuestion[] = [
     id: 12,
     type: 'text',
     question: 'What are you most proud of?'
+  },
+  {
+    id: 13,
+    type: 'text',
+    question: 'What question is missing?'
   }
 ]
