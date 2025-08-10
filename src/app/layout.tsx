@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: "Anonymous Survey", 
   description: "A design research experiment exploring anonymous existential thoughts",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#000000" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: "#626262" },
+    { media: "(prefers-color-scheme: dark)", color: "#626262" },
   ],
 };
 
@@ -34,6 +34,16 @@ export default function RootLayout({
         >
           <source src="https://poss.b-cdn.net/flower-test.mp4" type="video/mp4" />
         </video>
+        {/* Fill the iOS Safari notch/status bar area with a solid color when video can't reach */}
+        <div
+          aria-hidden
+          className="fixed left-0 right-0 z-[1] pointer-events-none"
+          style={{
+            top: 0,
+            height: 'env(safe-area-inset-top)',
+            background: '#626262',
+          }}
+        />
         {children}
       </body>
     </html>
