@@ -25,7 +25,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   {
     id: 4,
     type: 'text',
-    question: 'What is after death, if anything?'
+    question: 'What comes after death?'
   },
   {
     id: 5,
@@ -45,7 +45,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   {
     id: 8,
     type: 'text',
-    question: 'What would you want to happen to your belongings?'
+    question: 'Which possessions would you like to pass on?'
   },
   {
     id: 9,
@@ -55,7 +55,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   {
     id: 10,
     type: 'multiple_choice',
-    question: 'If all your financial needs were met, then what would you do?',
+    question: 'If money weren’t a concern, what would you work on?',
     options: [
       'Keep your current career',
       'Switch careers',
