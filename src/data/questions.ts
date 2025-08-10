@@ -56,5 +56,10 @@ export const surveyQuestions: SurveyQuestion[] = [
     id: 10,
     type: 'text',
     question: 'If money weren’t a concern, what would you work on?'
+  },
+  {
+    id: 11,
+    type: 'text',
+    question: "What do you consider your life’s purpose?"
   }
 ]
