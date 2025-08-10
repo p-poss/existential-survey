@@ -41,14 +41,12 @@ function TitleBar({ onClose }: { onClose: () => void }) {
       borderTopLeftRadius: 12,
       borderTopRightRadius: 12
     }}>
-      {/* Traffic lights */}
-      <div className="flex items-center gap-2">
+      {/* Close control */}
+      <div className="flex items-center">
         <button aria-label="Close window" onClick={onClose} style={{
           width: 12, height: 12, borderRadius: 9999, background: '#FF5F57', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)',
           display: 'inline-block'
         }} />
-        <span aria-disabled="true" title="Minimize disabled" style={{width: 12, height: 12, borderRadius: 9999, background: '#FEBC2E', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)', opacity: 0.4, pointerEvents: 'none'}} />
-        <span aria-disabled="true" title="Zoom disabled" style={{width: 12, height: 12, borderRadius: 9999, background: '#28C840', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)', opacity: 0.4, pointerEvents: 'none'}} />
       </div>
       {/* Center title */}
       <div className="flex-1 flex justify-center">
