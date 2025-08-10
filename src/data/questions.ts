@@ -3,8 +3,14 @@ import { SurveyQuestion } from '@/lib/supabase'
 export const surveyQuestions: SurveyQuestion[] = [
   {
     id: 1,
-    type: 'text',
-    question: 'At what age do you think you will die?'
+    type: 'multiple_choice',
+    question: 'Is this life:',
+    options: [
+      'A test',
+      "God's plan",
+      'A simulation',
+      'Something else (write in)'
+    ]
   },
   {
     id: 2,
@@ -43,14 +49,8 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: 9,
-    type: 'multiple_choice',
-    question: 'Is this life:',
-    options: [
-      'A test',
-      'God\'s plan',
-      'A simulation',
-      'Something else (write in)'
-    ]
+    type: 'text',
+    question: 'At what age do you think you will die?'
   },
   {
     id: 10,
