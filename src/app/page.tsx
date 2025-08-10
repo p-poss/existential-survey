@@ -345,7 +345,7 @@ export default function Home() {
         }
       } else if (event.key === 'ArrowRight') {
         event.preventDefault()
-        if (currentQuestion < 9) {
+        if (currentQuestion < 10) {
           setCurrentQuestion(currentQuestion + 1)
         }
       }
@@ -522,7 +522,7 @@ export default function Home() {
                   <div className="mac-pill">
                     <span className="num">{(currentQuestion + 1).toString().padStart(2, '0')}</span>
                     <span className="divider" />
-                    <span className="total">10</span>
+                  <span className="total">11</span>
                   </div>
                 </div>
               </div>
@@ -616,7 +616,7 @@ export default function Home() {
               <span aria-hidden>←</span>
             </button>
 
-            {currentQuestion === 9 ? (
+            {currentQuestion === 10 ? (
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
@@ -647,7 +647,7 @@ export default function Home() {
               </button>
             ) : (
               <button
-                onClick={() => setCurrentQuestion(Math.min(9, currentQuestion + 1))}
+                onClick={() => setCurrentQuestion(Math.min(10, currentQuestion + 1))}
                 className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 cursor-pointer"
                 onPointerDown={playNavClick}
                 style={{ 
