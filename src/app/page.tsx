@@ -192,6 +192,66 @@ export default function Home() {
   const [isWindowOpen, setIsWindowOpen] = useState(false)
   const [isIconSelected, setIsIconSelected] = useState(false)
   const iconRef = useRef<HTMLDivElement | null>(null)
+  const audioCtxRef = useRef<AudioContext | null>(null)
+
+  const ensureCtx = (): AudioContext | null => {
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+      }
+      const ctx = audioCtxRef.current
+      if (!ctx) return null
+      if (ctx.state === 'suspended') void ctx.resume()
+      return ctx
+    } catch {
+      return null
+    }
+  }
+
+  const blip = (
+    ctx: AudioContext,
+    startOffset: number,
+    freq: number,
+    duration: number,
+    peakGain: number,
+    hpFreq = 800
+  ) => {
+    const now = ctx.currentTime
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    const hp = ctx.createBiquadFilter()
+    hp.type = 'highpass'
+    hp.frequency.value = hpFreq
+    osc.type = 'square'
+    osc.frequency.setValueAtTime(freq, now + startOffset)
+    gain.gain.setValueAtTime(0.0001, now + startOffset)
+    gain.gain.exponentialRampToValueAtTime(peakGain, now + startOffset + 0.004)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + startOffset + duration)
+    osc.connect(gain).connect(hp).connect(ctx.destination)
+    osc.start(now + startOffset)
+    osc.stop(now + startOffset + duration + 0.005)
+  }
+
+  const playClick = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    blip(ctx, 0.0, 1600, 0.045, 0.18)
+    blip(ctx, 0.012, 2300, 0.05, 0.14)
+  }
+
+  const playNavClick = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    blip(ctx, 0.0, 1100, 0.05, 0.16)
+    blip(ctx, 0.012, 1600, 0.05, 0.12)
+  }
+
+  const playSubmitClick = () => {
+    const ctx = ensureCtx()
+    if (!ctx) return
+    blip(ctx, 0.0, 900, 0.07, 0.2, 500)
+    blip(ctx, 0.018, 1400, 0.08, 0.16, 600)
+  }
 
   // Keyboard navigation
   useEffect(() => {
@@ -291,9 +351,10 @@ export default function Home() {
           tabIndex={0}
           aria-label="Open Anonymous Survey"
           aria-selected={isIconSelected}
+          onPointerDown={playClick}
           onClick={() => setIsIconSelected(true)}
           onDoubleClick={() => { setIsIconSelected(false); setIsWindowOpen(true) }}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setIsIconSelected(false); setIsWindowOpen(true) } }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { playClick(); setIsIconSelected(false); setIsWindowOpen(true) } }}
           style={{
             position: 'absolute',
             left: '50%',
@@ -445,6 +506,7 @@ export default function Home() {
               onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
               disabled={currentQuestion === 0}
               className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              onPointerDown={playNavClick}
               style={{ 
                 backgroundColor: currentQuestion === 0 ? 'rgba(245, 245, 247, 0.8)' : 'rgba(255, 255, 255, 0.95)',
                 border: '1px solid rgba(0, 0, 0, 0.12)',
@@ -476,6 +538,7 @@ export default function Home() {
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                onPointerDown={playSubmitClick}
                 style={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   border: '1px solid rgba(0, 0, 0, 0.12)',
@@ -503,6 +566,7 @@ export default function Home() {
               <button
                 onClick={() => setCurrentQuestion(Math.min(9, currentQuestion + 1))}
                 className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 cursor-pointer"
+                onPointerDown={playNavClick}
                 style={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   border: '1px solid rgba(0, 0, 0, 0.12)',
