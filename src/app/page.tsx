@@ -117,8 +117,8 @@ function InteractiveElements({
         </div>
       ) : (
         <div className="space-y-3">
-          {currentQ.options?.map((option, index) => (
-            <label key={index} className="flex items-center space-x-3 cursor-pointer" onPointerDown={onRadioClick}>
+          {currentQ.options?.map((option) => (
+            <label key={option} className="flex items-center space-x-3 cursor-pointer" onPointerDown={onRadioClick}>
               <div className="relative" style={{width: 16, height: 16}}>
                 <div 
                   className="rounded-full"
@@ -453,7 +453,7 @@ export default function Home() {
       stopCelebrationMusic()
     }
     return () => stopCelebrationMusic()
-  }, [isWindowOpen, isComplete])
+  }, [isWindowOpen, isComplete, isCelebrating])
 
   // Deselect icon when clicking outside the icon area
   useEffect(() => {
@@ -603,9 +603,9 @@ export default function Home() {
                 }}>
           {/* Content container */}
           <div className="w-full flex flex-col flex-1 relative">
-            {isCelebrating && (
+                {isCelebrating && (
               <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
-                <img src="/party.gif" alt="" className="max-w-[70%] max-h-[70%] opacity-90" />
+                <Image src="/party.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
               </div>
             )}
             {/* Chunk 1: Video area with number and noise (hidden on completion) */}
@@ -665,7 +665,7 @@ export default function Home() {
                 {/* Celebration overlay GIF */}
                 {isCelebrating && (
                   <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-                    <img src="/party.gif" alt="" className="max-w-[70%] max-h-[70%] opacity-90" />
+                    <Image src="/party.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
                   </div>
                 )}
                 <InteractiveElements 
@@ -730,6 +730,7 @@ export default function Home() {
               disabled={currentQuestion === 0}
               className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               onPointerDown={playNavClick}
+              aria-label="Previous question"
               style={{ 
                 backgroundColor: currentQuestion === 0 ? 'rgba(245, 245, 247, 0.8)' : 'rgba(255, 255, 255, 0.95)',
                 border: '1px solid rgba(0, 0, 0, 0.12)',
@@ -790,6 +791,7 @@ export default function Home() {
                 onClick={() => setCurrentQuestion(Math.min(12, currentQuestion + 1))}
                 className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 cursor-pointer"
                 onPointerDown={playNavClick}
+                aria-label="Next question"
                 style={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   border: '1px solid rgba(0, 0, 0, 0.12)',

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Download, Eye, EyeOff } from 'lucide-react'
-import { SurveyResponse } from '@/lib/supabase'
+import type { SurveyResponse } from '@/lib/types'
 
 export default function AdminDashboard() {
   const [responses, setResponses] = useState<SurveyResponse[]>([])

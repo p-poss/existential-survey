@@ -13,6 +13,19 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set())
   const [readyVideos, setReadyVideos] = useState<Set<number>>(new Set())
 
+  const isConstrainedConnection = () => {
+    try {
+      const nav = (typeof navigator !== 'undefined' ? navigator : undefined) as unknown as {
+        connection?: { effectiveType?: string; saveData?: boolean }
+      }
+      const effectiveType = nav?.connection?.effectiveType || '4g'
+      const saveData = nav?.connection?.saveData || false
+      return saveData || effectiveType === 'slow-2g' || effectiveType === '2g' || effectiveType === '3g'
+    } catch {
+      return false
+    }
+  }
+
   // Video sources mapping
   const videoSources = {
     1: 'https://poss.b-cdn.net/puffco-peak-use.mp4',
@@ -30,9 +43,10 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
     13: 'https://poss.b-cdn.net/arktura-zund.mp4' // reuse Q6 source
   }
 
-  // Calculate video range (±2 from current question)
-  const minVideo = Math.max(1, questionNumber - 2)
-  const maxVideo = Math.min(13, questionNumber + 2)
+  // Calculate adaptive video range
+  const buffer = isConstrainedConnection() ? 1 : 2
+  const minVideo = Math.max(1, questionNumber - buffer)
+  const maxVideo = Math.min(13, questionNumber + buffer)
   const currentVideoSource = videoSources[questionNumber as keyof typeof videoSources] || videoSources[1]
 
   // Handle video time updates
@@ -73,6 +87,8 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   // Create video element
   const createVideoElement = (videoNum: number) => {
     const isCurrentVideo = videoSources[videoNum as keyof typeof videoSources] === currentVideoSource
+    const isNeighbor = Math.abs(videoNum - questionNumber) === 1
+    const eagerPreload = isCurrentVideo || isNeighbor
     const shouldLoad = loadedVideos.has(videoNum)
     
     if (!shouldLoad) return null
@@ -91,7 +107,7 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
         autoPlay
         muted
         loop
-        preload="auto"
+        preload={eagerPreload ? 'auto' : 'metadata'}
         playsInline
         className={`w-full h-full object-cover ${isCurrentVideo ? 'block' : 'hidden'}`}
         style={{

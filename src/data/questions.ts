@@ -1,4 +1,4 @@
-import { SurveyQuestion } from '@/lib/supabase'
+import type { SurveyQuestion } from '@/lib/types'
 
 export const surveyQuestions: SurveyQuestion[] = [
   {
