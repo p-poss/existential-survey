@@ -57,7 +57,7 @@ function TitleBar({ onClose }: { onClose: () => void }) {
           fontWeight: 600,
           color: '#3A3A3C',
           letterSpacing: 0.2
-        }}>...Before We Die</div>
+        }}>...Contemplate Before We Die</div>
       </div>
       {/* Right side spacer */}
       <div style={{width: 60}} />
@@ -601,7 +601,12 @@ export default function Home() {
                   background: 'rgba(255,255,255,0.95)'
                 }}>
           {/* Content container */}
-          <div className="w-full flex flex-col flex-1">
+          <div className="w-full flex flex-col flex-1 relative">
+            {isCelebrating && (
+              <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
+                <img src="/party.gif" alt="" className="max-w-[70%] max-h-[70%] opacity-90" />
+              </div>
+            )}
             {/* Chunk 1: Video area with number and noise (hidden on completion) */}
             {isComplete ? (
               <div className="h-[200px]" style={{
@@ -653,9 +658,15 @@ export default function Home() {
             
             {/* Chunk 3: Interactive elements (hidden when complete) */}
             {!isComplete && (
-              <div className="pt-3 pb-3 px-3 flex-1 flex flex-col min-h-0" style={{
+              <div className="pt-3 pb-3 px-3 flex-1 flex flex-col min-h-0 relative" style={{
                 backgroundColor: 'rgba(255,255,255,0.95)'
               }}>
+                {/* Celebration overlay GIF */}
+                {isCelebrating && (
+                  <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+                    <img src="/party.gif" alt="" className="max-w-[70%] max-h-[70%] opacity-90" />
+                  </div>
+                )}
                 <InteractiveElements 
                   currentQuestion={currentQuestion}
                   formData={formData}
