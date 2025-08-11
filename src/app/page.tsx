@@ -445,6 +445,7 @@ export default function Home() {
   }, [currentQuestion, isWindowOpen])
 
   // Stop music if window closes or completion view exits
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isWindowOpen || !isComplete) {
       if (isCelebrating) {
@@ -453,7 +454,7 @@ export default function Home() {
       stopCelebrationMusic()
     }
     return () => stopCelebrationMusic()
-  }, [isWindowOpen, isComplete, isCelebrating])
+  }, [isWindowOpen, isComplete])
 
   // Deselect icon when clicking outside the icon area
   useEffect(() => {
