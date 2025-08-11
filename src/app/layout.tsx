@@ -22,7 +22,7 @@ export default function RootLayout({
       <body>
         <div
           id="bg-root"
-          className="fixed left-0 right-0 bottom-0 z-[-1] pointer-events-none"
+          className="fixed left-0 right-0 bottom-0 z-0 pointer-events-none"
           aria-hidden
           style={{
             // Start below the notch; fill remaining viewport
