@@ -25,20 +25,8 @@ html, body {
   height: 100%;
   min-height: 100dvh;
   overflow: hidden;
-  /* Match OS8 pattern base so iOS Safari notch/safe-area blends */
-  background-color: #7b88b8;
-  /* Also paint the same pattern here so Safari may use it in the notch area */
-  background-image:
-    radial-gradient(circle at 2px 2px, rgba(255,255,255,0.28) 0, rgba(255,255,255,0.28) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255,255,255,0.065) 0%, rgba(0,0,0,0.08) 100%),
-    radial-gradient(circle at 26px 18px, rgba(0,0,0,0.20) 0, rgba(0,0,0,0.20) 6px, transparent 6px),
-    radial-gradient(circle at 30px 14px, rgba(255,255,255,0.36) 0, rgba(255,255,255,0.36) 6px, transparent 6px);
-  background-size:
-    32px 32px,
-    100% 100%,
-    96px 96px,
-    96px 96px;
-  background-blend-mode: normal, overlay, normal, normal;
+  /* Solid color for entire background including notch */
+  background-color: #63639C;
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
 }
@@ -70,29 +58,7 @@ html, body {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06) inset;
 }
 
-/* Modern macOS neutral button */
-.mac-button {
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
-  color: #1D1D1F;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 20px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.mac-button:hover {
-  background-color: rgba(248, 248, 248, 0.95);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
-}
-
-.mac-button:disabled {
-  color: rgba(0, 0, 0, 0.4);
-  background-color: rgba(245, 245, 247, 0.8);
-}
+/* Removed unused .mac-button styles */
 
 /* Counter pill */
 .mac-pill {
@@ -126,24 +92,4 @@ html, body {
   filter: invert(100%);
 }
 
-/* Mac OS 8 style patterned background (embossed logo grid effect) */
-.os8-pattern {
-  background-color: #7b88b8;
-  background-image:
-    radial-gradient(circle at 2px 2px, rgba(255,255,255,0.28) 0, rgba(255,255,255,0.28) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255,255,255,0.065) 0%, rgba(0,0,0,0.08) 100%),
-    radial-gradient(circle at 26px 18px, rgba(0,0,0,0.20) 0, rgba(0,0,0,0.20) 6px, transparent 6px),
-    radial-gradient(circle at 30px 14px, rgba(255,255,255,0.36) 0, rgba(255,255,255,0.36) 6px, transparent 6px);
-  background-size:
-    32px 32px,
-    100% 100%,
-    96px 96px,
-    96px 96px;
-  background-blend-mode: normal, overlay, normal, normal;
-  filter: saturate(95%);
-}
-
-/* Ensure invert wins when toggled alongside os8-pattern */
-.os8-pattern.strobe-invert {
-  filter: invert(100%) saturate(95%);
-}
+/* Removed patterned background */

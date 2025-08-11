@@ -29,8 +29,10 @@ export async function POST(request: NextRequest) {
       q8: body.q8 ? body.q8.trim() : "",
       q9: body.q9 ? body.q9.trim() : "",
       q10: body.q10 ? body.q10.trim() : "",
-      q9_option: body.q9_option || null,
-      q10_option: body.q10_option || null,
+      q11: body.q11 ? body.q11.trim() : "",
+      q12: body.q12 ? body.q12.trim() : "",
+      q13: body.q13 ? body.q13.trim() : "",
+      q1_option: body.q1_option || null,
       completion_time: body.completion_time || null
     }
 

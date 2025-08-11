@@ -24,7 +24,7 @@ export default function AdminDashboard() {
       } else {
         setError('Failed to fetch responses')
       }
-    } catch (error) {
+    } catch {
       setError('Error fetching responses')
     } finally {
       setLoading(false)
@@ -33,28 +33,33 @@ export default function AdminDashboard() {
 
   const exportToCSV = () => {
     const headers = [
-      'ID', 'Timestamp', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10',
-      'Q9 Option', 'Q10 Option', 'Completion Time (seconds)'
+      'ID', 'Timestamp',
+      'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13',
+      'Q1 Option', 'Completion Time (seconds)'
     ]
-    
+
+    const escape = (s: string) => `"${s.replace(/"/g, '""')}"`
+
     const csvContent = [
       headers.join(','),
       ...responses.map(r => [
         r.id,
         r.created_at,
-        `"${r.q1.replace(/"/g, '""')}"`,
-        `"${r.q2.replace(/"/g, '""')}"`,
-        `"${r.q3.replace(/"/g, '""')}"`,
-        `"${r.q4.replace(/"/g, '""')}"`,
-        `"${r.q5.replace(/"/g, '""')}"`,
-        `"${r.q6.replace(/"/g, '""')}"`,
-        `"${r.q7.replace(/"/g, '""')}"`,
-        `"${r.q8.replace(/"/g, '""')}"`,
-        `"${r.q9.replace(/"/g, '""')}"`,
-        `"${r.q10.replace(/"/g, '""')}"`,
-        r.q9_option ? `"${r.q9_option.replace(/"/g, '""')}"` : '',
-        r.q10_option ? `"${r.q10_option.replace(/"/g, '""')}"` : '',
-        r.completion_time || ''
+        escape(r.q1 || ''),
+        escape(r.q2 || ''),
+        escape(r.q3 || ''),
+        escape(r.q4 || ''),
+        escape(r.q5 || ''),
+        escape(r.q6 || ''),
+        escape(r.q7 || ''),
+        escape(r.q8 || ''),
+        escape(r.q9 || ''),
+        escape(r.q10 || ''),
+        escape(r.q11 || ''),
+        escape(r.q12 || ''),
+        escape(r.q13 || ''),
+        r.q1_option ? escape(r.q1_option) : '',
+        r.completion_time ?? ''
       ].join(','))
     ].join('\n')
 
@@ -174,6 +179,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <strong>Q1:</strong> {response.q1}
+                    {response.q1_option && <span className="text-gray-600"> ({response.q1_option})</span>}
                   </div>
                   <div>
                     <strong>Q2:</strong> {response.q2}
@@ -198,11 +204,18 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <strong>Q9:</strong> {response.q9}
-                    {response.q9_option && <span className="text-gray-600"> ({response.q9_option})</span>}
                   </div>
                   <div>
                     <strong>Q10:</strong> {response.q10}
-                    {response.q10_option && <span className="text-gray-600"> ({response.q10_option})</span>}
+                  </div>
+                  <div>
+                    <strong>Q11:</strong> {response.q11}
+                  </div>
+                  <div>
+                    <strong>Q12:</strong> {response.q12}
+                  </div>
+                  <div>
+                    <strong>Q13:</strong> {response.q13}
                   </div>
                 </div>
               </motion.div>

@@ -22,13 +22,14 @@ export default function RootLayout({
       <body>
         <div
           id="bg-root"
-          className="fixed inset-0 z-0 pointer-events-none os8-pattern"
+          className="fixed left-0 right-0 bottom-0 z-[-1] pointer-events-none"
           aria-hidden
           style={{
-            // Extend behind iOS Safari notch: move up by safe-area and increase height
-            marginTop: 'calc(-1 * env(safe-area-inset-top))',
-            height: 'calc(100dvh + env(safe-area-inset-top))',
-            width: '100vw'
+            // Start below the notch; fill remaining viewport
+            top: 'env(safe-area-inset-top)',
+            height: 'calc(100dvh - env(safe-area-inset-top))',
+            width: '100vw',
+            backgroundColor: '#63639C'
           }}
         />
         
