@@ -5,9 +5,8 @@ export async function POST(request: NextRequest) {
   try {
     // Gracefully handle missing Supabase configuration in production
     if (!supabase) {
-      const body = await request.json().catch(() => ({}))
       return NextResponse.json(
-        { success: true, id: null, note: 'Supabase not configured; response accepted without persistence', echo: body },
+        { success: true, id: null, note: 'Supabase not configured; response accepted without persistence' },
         { status: 201 }
       )
     }
