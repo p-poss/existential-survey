@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 import ContentAreaVideo from "@/components/ContentAreaVideo"
 import { surveyQuestions } from '@/data/questions'
@@ -537,7 +538,7 @@ export default function Home() {
             // Single outline ring only when selected (no inner stroke)
             boxShadow: isIconSelected ? '0 0 0 2px rgba(60,60,67,0.32)' : 'none',
           }}>
-            <img src="/file.png" alt="Anonymous Survey file icon" width={72} height={72} />
+            <Image src="/file.png" alt="Anonymous Survey file icon" width={72} height={72} priority />
           </div>
           <div style={{
             marginTop: 3,
