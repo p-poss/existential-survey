@@ -22,8 +22,10 @@ export interface SurveyResponse {
   q8: string
   q9: string
   q10: string
-  q9_option?: string // For multiple choice question 9
-  q10_option?: string // For multiple choice question 10
+  q11: string
+  q12: string
+  q13: string
+  q1_option?: string // For multiple choice question 1 (write-in)
   completion_time?: number // in seconds
 }
 
