@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+import "98.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,6 +14,15 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+const msSans = localFont({
+  src: [
+    { path: "../../public/fonts/ms-sans-serif/ms_sans_serif.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/ms-sans-serif/ms_sans_serif_bold.woff2", weight: "700", style: "normal" },
+  ],
+  variable: "--font-ms-sans",
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={msSans.variable}>
         <div
           id="bg-root"
           className="fixed left-0 right-0 bottom-0 z-0 pointer-events-none"
@@ -29,7 +40,7 @@ export default function RootLayout({
             top: 'env(safe-area-inset-top)',
             height: 'calc(100dvh - env(safe-area-inset-top))',
             width: '100vw',
-            backgroundColor: '#63639C'
+            backgroundColor: '#008080'
           }}
         />
         

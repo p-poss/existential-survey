@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-ms-sans), Tahoma, system-ui, -apple-system, sans-serif;
   --font-mono: Consolas, Monaco, monospace;
 }
 
@@ -26,9 +26,67 @@ html, body {
   min-height: 100dvh;
   overflow: hidden;
   /* Solid color for entire background including notch */
-  background-color: #63639C;
+  background-color: #008080;
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ms-sans), Tahoma, system-ui, -apple-system, sans-serif;
+}
+
+/* Ensure 98.css window content uses dark text even in dark mode */
+.window, .window-body {
+  color: #000000;
+}
+
+/* Radio/checkbox labels should be dark */
+.window-body .field-row label {
+  color: #1D1D1F;
+}
+
+/* Force MS Sans Serif across common UI elements */
+body, .window, .window-body, .title-bar, .status-bar, .field-row,
+button, input, label, h1, h2, h3, h4, h5, h6, p, span, div {
+  font-family: var(--font-ms-sans), Tahoma, system-ui, -apple-system, sans-serif;
+}
+
+/* Windows 98-style badge to match 98badges look */
+.badge98 {
+  display: inline-block;
+  background: #c0c0c0;
+  /* outer frame (raised) */
+  border-top: 1px solid #DFDFDF;
+  border-left: 1px solid #DFDFDF;
+  border-right: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+}
+
+.badge98-inner {
+  display: inline-flex;
+  align-items: stretch;
+  background: #c0c0c0;
+  padding: 2px;
+  /* inner frame (groove) */
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  border-right: 1px solid #808080;
+  border-bottom: 1px solid #808080;
+}
+
+.badge98-divider {
+  width: 2px;
+  background: linear-gradient(to right, #FFFFFF 0, #FFFFFF 1px, #808080 1px, #808080 100%);
+}
+
+.badge98-seg {
+  background: #c0c0c0;
+  padding: 3px 10px;
+  /* sunken segment */
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #FFFFFF;
+  border-bottom: 1px solid #FFFFFF;
+  color: #000000;
+  font-family: 'MS Sans Serif', 'Tahoma', system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  line-height: 1;
 }
 
 #__next, body > div:first-child {
