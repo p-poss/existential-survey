@@ -15,7 +15,7 @@ function QuestionText({
   const currentQ = surveyQuestions[currentQuestion]
   
   return (
-    <h2 className="font-semibold text-black mb-4 flex items-start" style={{ 
+    <h2 className="font-semibold text-black mb-2 flex items-start" style={{ 
       fontSize: '15px', 
       lineHeight: '22px',
       color: '#1D1D1F',
@@ -483,10 +483,10 @@ export default function Home() {
             // Custom 1px dash / 1px gap white border using layered repeating gradients
             backgroundImage: isIconSelected 
               ? [
-                  'repeating-linear-gradient(90deg, #ffffff 0 1px, transparent 1px 2px)', // top
-                  'repeating-linear-gradient(180deg, #ffffff 0 1px, transparent 1px 2px)', // right
-                  'repeating-linear-gradient(90deg, #ffffff 0 1px, transparent 1px 2px)', // bottom
-                  'repeating-linear-gradient(180deg, #ffffff 0 1px, transparent 1px 2px)'  // left
+                  'repeating-linear-gradient(90deg, #FFFE54 0 1px, transparent 1px 2px)', // top
+                  'repeating-linear-gradient(180deg, #FFFE54 0 1px, transparent 1px 2px)', // right
+                  'repeating-linear-gradient(90deg, #FFFE54 0 1px, transparent 1px 2px)', // bottom
+                  'repeating-linear-gradient(180deg, #FFFE54 0 1px, transparent 1px 2px)'  // left
                 ].join(', ')
               : 'none',
             // Avoid mixing shorthand background with clip/origin to prevent React warnings
@@ -547,20 +547,21 @@ export default function Home() {
             {isComplete ? (
                   <div className="h-[200px]" />
             ) : (
-                  <div className="h-[200px] relative z-20" style={{ background: '#c0c0c0' }}>
-                <div className="absolute inset-0 overflow-hidden">
-                  <ContentAreaVideo questionNumber={currentQuestion + 1} />
-                </div>
-                
-                <div className="absolute top-2 left-2 z-10">
-                  <div className="badge98">
-                    <div className="badge98-inner">
-                      <div className="badge98-seg" style={{ width: 38, textAlign: 'center' }}>
-                        {(currentQuestion + 1).toString().padStart(2, '0')}
-                      </div>
-                      <div className="badge98-divider" />
-                      <div className="badge98-seg" style={{ width: 38, textAlign: 'center' }}>
-                        13
+                  <div className="h-[200px] relative z-20" style={{ background: '#c0c0c0', padding: 6 }}>
+                <div className="sunken-panel w-full h-full relative overflow-hidden">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <ContentAreaVideo questionNumber={currentQuestion + 1} />
+                  </div>
+                  <div className="absolute top-2 left-2 z-10">
+                    <div className="badge98">
+                      <div className="badge98-inner">
+                        <div className="badge98-seg" style={{ width: 38, textAlign: 'center' }}>
+                          {(currentQuestion + 1).toString().padStart(2, '0')}
+                        </div>
+                        <div className="badge98-divider" />
+                        <div className="badge98-seg" style={{ width: 38, textAlign: 'center' }}>
+                          13
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -576,7 +577,8 @@ export default function Home() {
                   style={{
                         fontSize: '15px',
                         lineHeight: '22px',
-                        minHeight: '44px'
+                        minHeight: '44px',
+                        fontWeight: 600
                   }}
                 >
                   Responses submitted anonymously.
@@ -588,7 +590,7 @@ export default function Home() {
             
             {/* Chunk 3: Interactive elements (hidden when complete) */}
             {!isComplete && (
-                  <div className="pt-3 pb-3 px-3 flex-1 flex flex-col min-h-0 relative">
+                  <div className="pt-2 pb-3 px-3 flex-1 flex flex-col min-h-0 relative">
                 {/* Celebration overlay GIF */}
                 {isCelebrating && (
                   <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
