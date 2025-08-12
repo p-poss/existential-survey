@@ -18,7 +18,6 @@ function QuestionText({
     <h2 className="font-semibold text-black mb-4 flex items-start" style={{ 
       fontSize: '15px', 
       lineHeight: '22px',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif',
       color: '#1D1D1F',
       fontWeight: 600,
       letterSpacing: 0.1,
@@ -32,36 +31,11 @@ function QuestionText({
 // Title Bar Component (modern macOS style)
 function TitleBar({ onClose }: { onClose: () => void }) {
   return (
-    <div className="flex items-center" style={{
-      height: 36,
-      paddingLeft: 12,
-      paddingRight: 12,
-      borderBottom: '1px solid rgba(0,0,0,0.06)',
-      background: 'rgba(255,255,255,0.85)',
-      backdropFilter: 'blur(20px) saturate(180%)',
-      borderTopLeftRadius: 12,
-      borderTopRightRadius: 12
-    }}>
-      {/* Close control */}
-      <div className="flex items-center">
-        <button aria-label="Close window" onClick={onClose} style={{
-          width: 12, height: 12, borderRadius: 9999, background: '#FF5F57', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)',
-          display: 'inline-block'
-        }} />
+    <div className="title-bar">
+      <div className="title-bar-text">...Contemplate Before We Die</div>
+      <div className="title-bar-controls">
+        <button aria-label="Close" onClick={onClose} />
       </div>
-      {/* Center title */}
-      <div className="flex-1 flex justify-center">
-        <div style={{
-          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-          fontSize: 12,
-          lineHeight: '16px',
-          fontWeight: 600,
-          color: '#3A3A3C',
-          letterSpacing: 0.2
-        }}>...Contemplate Before We Die</div>
-      </div>
-      {/* Right side spacer */}
-      <div style={{width: 60}} />
     </div>
   )
 }
@@ -88,102 +62,56 @@ function InteractiveElements({
     const writeInText = e.target.value
     onInputChange('Something else (write in)', writeInText)
   }
-  
+
   return (
     <div>
       {currentQ.type === 'text' ? (
-        <div className="relative h-12">
-          <div className="absolute top-0 inset-x-0">
-            <input
-              type="text"
-              value={formData[fieldName] || ''}
-              onChange={(e) => onInputChange(e.target.value)}
-              placeholder="Type here..."
-              className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 mac-input"
-              style={{ 
-                outline: 'none',
-                color: '#1D1D1F',
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                border: '1px solid rgba(0,0,0,0.12)',
-                borderRadius: '10px',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
-                transition: 'all 0.2s ease'
-              }}
-              onFocus={onWriteInFocus}
-              autoComplete="off"
-            />
-          </div>
+        <div className="field-row">
+          <input
+            type="text"
+            value={formData[fieldName] || ''}
+            onChange={(e) => onInputChange(e.target.value)}
+            placeholder="Type here..."
+            onFocus={onWriteInFocus}
+            autoComplete="off"
+            style={{ width: '100%' }}
+          />
         </div>
       ) : (
-        <div className="space-y-3">
-          {currentQ.options?.map((option) => (
-            <label key={option} className="flex items-center space-x-3 cursor-pointer" onPointerDown={onRadioClick}>
-              <div className="relative" style={{width: 16, height: 16}}>
-                <div 
-                  className="rounded-full"
-                  style={{ 
-                    width: 16,
-                    height: 16,
-                    border: '1px solid rgba(0,0,0,0.12)',
-                    backgroundColor: 'rgba(255,255,255,0.95)',
-                    boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
-                    transition: 'all 0.2s ease'
-                  }}
-                />
-                {formData[fieldName] === option && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="rounded-full" style={{ width: 8, height: 8, background: '#007AFF' }} />
-                  </div>
-                )}
+        <div>
+          {currentQ.options?.map((option) => {
+            const optionId = `${fieldName}_${option.replace(/[^a-z0-9]+/gi, '_').toLowerCase()}`
+            return (
+              <div className="field-row" key={option} onPointerDown={onRadioClick}>
                 <input
+                  id={optionId}
                   type="radio"
                   name={fieldName}
                   value={option}
                   checked={formData[fieldName] === option}
                   onChange={(e) => onInputChange(e.target.value)}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
                 />
+                <label htmlFor={optionId}>{option}</label>
               </div>
-              <span className="text-black" style={{ 
-                fontSize: '16px', 
-                lineHeight: '21px',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                fontWeight: '400',
-                color: '#1D1D1F'
-              }}>{option}</span>
-            </label>
-          ))}
-      
-                {/* Custom input for "Something else (write in)" option */}
-              <div className="relative h-12">
-      {formData[fieldName] === 'Something else (write in)' && (
-        <div className="absolute top-3 inset-x-0">
-          <input
-              type="text"
-              value={formData[optionFieldName] || ''}
-              onChange={handleWriteInChange}
-              placeholder="Please specify..."
-              className="w-full border-0 rounded-lg focus:ring-0 focus:outline-none focus:border-0 mac-input"
-              style={{ 
-                outline: 'none',
-                color: '#1D1D1F',
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                border: '1px solid rgba(0,0,0,0.12)',
-                borderRadius: '10px',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                boxShadow: '0 0 0 1px rgba(0,0,0,0.04)',
-                transition: 'all 0.2s ease'
-              }}
-              onFocus={onWriteInFocus}
-              autoComplete="off"
-            />
-          </div>
-        )}
-      </div>
+            )
+          })}
+
+          {formData[fieldName] === 'Something else (write in)' && (
+            <div className="field-row" style={{ marginTop: 8 }}>
+              <input
+                type="text"
+                value={formData[optionFieldName] || ''}
+                onChange={handleWriteInChange}
+                placeholder="Please specify..."
+                onFocus={onWriteInFocus}
+                autoComplete="off"
+                style={{ width: '100%' }}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
-  )}
-</div>
   )
 }
 
@@ -529,30 +457,42 @@ export default function Home() {
           }}
         >
           <div style={{
-            width: 80,
-            height: 80,
+            width: 64,
+            height: 64,
             display: 'grid',
             placeItems: 'center',
             borderRadius: 2,
             transition: 'transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease',
-            backgroundColor: isIconSelected ? 'rgba(0,0,0,0.20)' : 'transparent',
-            // Single outline ring only when selected (no inner stroke)
-            boxShadow: isIconSelected ? '0 0 0 2px rgba(60,60,67,0.32)' : 'none',
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
           }}>
-            <Image src="/file.png" alt="Anonymous Survey file icon" width={72} height={72} priority />
+            <Image src="/File-3.png" alt="Anonymous Survey file icon" width={48} height={48} priority />
           </div>
           <div style={{
             marginTop: 3,
             padding: '2px 8px',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
             fontSize: 12,
             lineHeight: '16px',
-            color: isIconSelected ? '#FFFFFF' : '#FFFFFF',
-            fontWeight: 600,
-            textShadow: isIconSelected ? 'none' : '0 1px 2px rgba(0,0,0,0.6)',
+            color: '#FFFFFF',
+            fontWeight: 400,
+            textShadow: 'none',
             textAlign: 'center',
-            background: isIconSelected ? 'rgba(60,60,67,0.48)' : 'transparent',
-            borderRadius: 2,
+            backgroundColor: isIconSelected ? '#000A71' : 'transparent',
+            border: 'none',
+            borderRadius: 0,
+            // Custom 1px dash / 1px gap white border using layered repeating gradients
+            backgroundImage: isIconSelected 
+              ? [
+                  'repeating-linear-gradient(90deg, #ffffff 0 1px, transparent 1px 2px)', // top
+                  'repeating-linear-gradient(180deg, #ffffff 0 1px, transparent 1px 2px)', // right
+                  'repeating-linear-gradient(90deg, #ffffff 0 1px, transparent 1px 2px)', // bottom
+                  'repeating-linear-gradient(180deg, #ffffff 0 1px, transparent 1px 2px)'  // left
+                ].join(', ')
+              : 'none',
+            // Avoid mixing shorthand background with clip/origin to prevent React warnings
+            backgroundPosition: '0 0, 100% 0, 0 100%, 0 0',
+            backgroundSize: '100% 1px, 1px 100%, 100% 1px, 1px 100%',
+            backgroundRepeat: 'repeat-x, repeat-y, repeat-x, repeat-y',
             // No border/outline around label highlight; background only
             boxShadow: 'none'
           }}>
@@ -585,23 +525,17 @@ export default function Home() {
                   opacity: { duration: 0.18, ease: 'easeOut' },
                   filter: { duration: 0.22, ease: 'easeOut' }
                 }}
-                className="flex flex-col shadow-2xl"
+                className="window"
                 style={{
                   width: '100%',
                   height: '100%',
-                  border: '1px solid rgba(0,0,0,0.1)',
-                  borderRadius: '12px',
-                  background: 'rgba(255,255,255,0.8)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2)',
                   overflow: 'hidden',
-                  transformOrigin: 'center center'
+                  display: 'flex',
+                  flexDirection: 'column'
                 }}
               >
                 <TitleBar onClose={() => { playCloseSwoosh(); setIsWindowOpen(false) }} />
-                <div className="flex-1 flex flex-col min-h-0 overflow-y-auto" style={{
-                  background: 'rgba(255,255,255,0.95)'
-                }}>
+                <div className="window-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflowY: 'auto' }}>
           {/* Content container */}
           <div className="w-full flex flex-col flex-1 relative">
                 {isCelebrating && (
@@ -611,44 +545,38 @@ export default function Home() {
             )}
             {/* Chunk 1: Video area with number and noise (hidden on completion) */}
             {isComplete ? (
-              <div className="h-[200px]" style={{
-                borderBottom: '1px solid rgba(0,0,0,0.06)',
-                backgroundColor: 'rgba(255,255,255,0.95)'
-              }} />
+                  <div className="h-[200px]" />
             ) : (
-              <div className="h-[200px] relative z-20" style={{
-                borderBottom: '1px solid rgba(0,0,0,0.06)',
-                background: 'rgba(248,248,248,0.8)'
-              }}>
+                  <div className="h-[200px] relative z-20" style={{ background: '#c0c0c0' }}>
                 <div className="absolute inset-0 overflow-hidden">
                   <ContentAreaVideo questionNumber={currentQuestion + 1} />
                 </div>
                 
-                <div className="absolute top-3 left-3 z-10">
-                  <div className="mac-pill">
-                    <span className="num">{(currentQuestion + 1).toString().padStart(2, '0')}</span>
-                    <span className="divider" />
-                  <span className="total">13</span>
+                <div className="absolute top-2 left-2 z-10">
+                  <div className="badge98">
+                    <div className="badge98-inner">
+                      <div className="badge98-seg" style={{ width: 38, textAlign: 'center' }}>
+                        {(currentQuestion + 1).toString().padStart(2, '0')}
+                      </div>
+                      <div className="badge98-divider" />
+                      <div className="badge98-seg" style={{ width: 38, textAlign: 'center' }}>
+                        13
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
             
             {/* Chunk 2: Question text or completion */}
-            <div className="pt-3 px-3" style={{
-              borderBottom: '1px solid rgba(0,0,0,0.06)',
-              backgroundColor: 'rgba(255,255,255,0.95)'
-            }}>
+                <div className="pt-3 px-3">
               {isComplete ? (
                 <h2
-                  className="font-semibold text-black text-center mb-4"
+                      className="text-center mb-4"
                   style={{
-                    fontSize: '15px',
-                    lineHeight: '22px',
-                    minHeight: '44px',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif',
-                    color: '#1D1D1F',
-                    letterSpacing: 0.1
+                        fontSize: '15px',
+                        lineHeight: '22px',
+                        minHeight: '44px'
                   }}
                 >
                   Responses submitted anonymously.
@@ -660,9 +588,7 @@ export default function Home() {
             
             {/* Chunk 3: Interactive elements (hidden when complete) */}
             {!isComplete && (
-              <div className="pt-3 pb-3 px-3 flex-1 flex flex-col min-h-0 relative" style={{
-                backgroundColor: 'rgba(255,255,255,0.95)'
-              }}>
+                  <div className="pt-3 pb-3 px-3 flex-1 flex flex-col min-h-0 relative">
                 {/* Celebration overlay GIF */}
                 {isCelebrating && (
                   <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
@@ -689,17 +615,13 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Chunk 4: Footer area; single full-width button on completion */}
-        <div className="mt-auto" style={{
-          background: 'rgba(255,255,255,0.95)',
-          padding: '12px',
-          borderTop: '1px solid rgba(0,0,0,0.06)'
-        }}>
+        {/* Chunk 4: Footer area; actions */}
+        <div className="window-body" style={{ padding: 12 }}>
           {isComplete ? (
             <div className="w-full">
               <button
                 type="button"
-                className="w-full flex items-center justify-center px-6 py-2 cursor-pointer"
+                className="default"
                 onPointerDown={playSubmitClick}
                 onClick={() => {
                   setIsCelebrating(prev => {
@@ -707,18 +629,6 @@ export default function Home() {
                     if (next) startCelebrationMusic(); else stopCelebrationMusic()
                     return next
                   })
-                }}
-                style={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  border: '1px solid rgba(0, 0, 0, 0.12)',
-                  borderRadius: '8px',
-                  color: '#1D1D1F',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                  fontWeight: '500',
-                  fontSize: '16px',
-                  lineHeight: '21px',
-                  boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.04)',
-                  transition: 'all 0.2s ease'
                 }}
               >
                 {isCelebrating ? 'Stop The Party' : 'Let\u2019s Celebrate'}
@@ -729,92 +639,29 @@ export default function Home() {
             <button
               onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
               disabled={currentQuestion === 0}
-              className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               onPointerDown={playNavClick}
               aria-label="Previous question"
-              style={{ 
-                backgroundColor: currentQuestion === 0 ? 'rgba(245, 245, 247, 0.8)' : 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid rgba(0, 0, 0, 0.12)',
-                borderRadius: '8px',
-                color: currentQuestion === 0 ? 'rgba(0, 0, 0, 0.4)' : '#1D1D1F',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                fontWeight: '500',
-                fontSize: '16px',
-                lineHeight: '21px',
-                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.04)',
-                transition: 'all 0.2s ease'
-              }}
-                              onMouseEnter={(e) => {
-                  if (currentQuestion > 0) {
-                    e.currentTarget.style.backgroundColor = 'rgba(248, 248, 248, 0.95)'
-                    e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.08)'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = currentQuestion === 0 ? 'rgba(245, 245, 247, 0.8)' : 'rgba(255, 255, 255, 0.95)'
-                  e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.04)'
-                }}
             >
-              <span aria-hidden>←</span>
+              Prev
             </button>
 
             {currentQuestion === 12 ? (
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 onPointerDown={playSubmitClick}
-                style={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  border: '1px solid rgba(0, 0, 0, 0.12)',
-                  borderRadius: '8px',
-                  color: '#1D1D1F',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                  fontWeight: '500',
-                  fontSize: '16px',
-                  lineHeight: '21px',
-                  boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.04)',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(248, 248, 248, 0.95)'
-                  e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.08)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.95)'
-                  e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.04)'
-                }}
+                className="default"
               >
-                <span>{isSubmitting ? 'Submitting…' : 'Submit'}</span>
+                {isSubmitting ? 'Submitting…' : 'Submit'}
               </button>
             ) : (
               <button
                 onClick={() => setCurrentQuestion(Math.min(12, currentQuestion + 1))}
-                className="flex items-center justify-center space-x-2 flex-1 px-6 py-2 cursor-pointer"
                 onPointerDown={playNavClick}
                 aria-label="Next question"
-                style={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  border: '1px solid rgba(0, 0, 0, 0.12)',
-                  borderRadius: '8px',
-                  color: '#1D1D1F',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                  fontWeight: '500',
-                  fontSize: '16px',
-                  lineHeight: '21px',
-                  boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.04)',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(248, 248, 248, 0.95)'
-                  e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.08)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.95)'
-                  e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.04)'
-                }}
+                className="default"
               >
-                <span aria-hidden>→</span>
+                Next
               </button>
             )}
           </div>
