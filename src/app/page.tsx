@@ -32,7 +32,7 @@ function QuestionText({
 function TitleBar({ onClose }: { onClose: () => void }) {
   return (
     <div className="title-bar">
-      <div className="title-bar-text">...Contemplate Before We Die</div>
+      <div className="title-bar-text">"...Contemplate Before We Die"</div>
       <div className="title-bar-controls">
         <button aria-label="Close" onClick={onClose} />
       </div>
@@ -145,6 +145,7 @@ export default function Home() {
   const [isIconSelected, setIsIconSelected] = useState(false)
   const [isCelebrating, setIsCelebrating] = useState(false)
   const [showLogin, setShowLogin] = useState(true)
+  const [clock, setClock] = useState<string>('')
   const [loginAge, setLoginAge] = useState<string>('')
   const [loginLocation, setLoginLocation] = useState<string>('')
   const iconRef = useRef<HTMLDivElement | null>(null)
@@ -201,6 +202,14 @@ export default function Home() {
     osc.start(now + startOffset)
     osc.stop(now + startOffset + duration + 0.005)
   }
+
+  // Taskbar clock updater
+  useEffect(() => {
+    const update = () => setClock(new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }))
+    update()
+    const id = window.setInterval(update, 30_000)
+    return () => window.clearInterval(id)
+  }, [])
 
   const playClick = () => {
     const ctx = ensureCtx()
@@ -463,7 +472,7 @@ export default function Home() {
           <div style={{
             position: 'absolute',
             left: '50%',
-            top: '40%',
+            top: '50%',
             transform: 'translate(-50%, -50%)',
             zIndex: 3,
             width: 420,
@@ -471,9 +480,9 @@ export default function Home() {
           }}>
             <div className="window" role="dialog" aria-modal="true" aria-label="Welcome to Windows">
               <div className="title-bar">
-                <div className="title-bar-text">Welcome to IsThis.Life</div>
+                <div className="title-bar-text">Welcome to "13 Questions To Contemplate..."</div>
                 <div className="title-bar-controls">
-                  <button aria-label="Close" onClick={() => setShowLogin(false)} />
+                  <button aria-label="Close" onClick={() => { playCloseSwoosh(); setShowLogin(false); }} />
                 </div>
               </div>
               <form className="window-body" onSubmit={handleLoginOk} style={{ paddingBottom: 12 }}>
@@ -483,16 +492,16 @@ export default function Home() {
                   </div>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginTop: 0, marginBottom: 8 }}>
-                      <p style={{ margin: 0 }}>Type your general current age for the survey.</p>
-                      <button type="submit" className="default">OK</button>
+                      <p style={{ margin: 0 }}>Type your general location and age for the survey.</p>
+                      <button type="submit" className="default" onPointerDown={playSubmitClick}>OK</button>
                     </div>
                     <div className="field-row" style={{ alignItems: 'center', gap: 8 }}>
-                      <label htmlFor="login-pass" style={{ minWidth: 80 }}><u>A</u>ge:</label>
-                      <input id="login-pass" type="password" value={loginAge} onChange={(e) => setLoginAge(e.target.value)} autoFocus />
+                      <label htmlFor="login-location" style={{ minWidth: 80 }}><u>L</u>ocation:</label>
+                      <input id="login-location" type="text" value={loginLocation} onChange={(e) => setLoginLocation(e.target.value)} onFocus={playInputFocus} autoFocus />
                     </div>
                     <div className="field-row" style={{ alignItems: 'center', gap: 8, marginTop: 8 }}>
-                      <label htmlFor="login-location" style={{ minWidth: 80 }}><u>L</u>ocation:</label>
-                      <input id="login-location" type="text" value={loginLocation} onChange={(e) => setLoginLocation(e.target.value)} />
+                      <label htmlFor="login-pass" style={{ minWidth: 80 }}><u>A</u>ge:</label>
+                      <input id="login-pass" type="password" value={loginAge} onChange={(e) => setLoginAge(e.target.value)} onFocus={playInputFocus} />
                     </div>
                   </div>
                 </div>
@@ -536,7 +545,7 @@ export default function Home() {
             backgroundColor: 'transparent',
             boxShadow: 'none',
           }}>
-            <Image src="/file-4.png" alt="Anonymous Survey file icon" width={48} height={48} priority />
+            <Image src="/file-6.png" alt="Anonymous Survey file icon" width={48} height={48} priority />
           </div>
           <div style={{
             marginTop: 3,
@@ -574,7 +583,7 @@ export default function Home() {
         {/* Window when open, absolutely centered above icon */}
         <AnimatePresence>
           {isWindowOpen && (
-            <div style={{
+              <div style={{
               position: 'absolute',
               left: '50%',
               top: '50%',
@@ -582,19 +591,12 @@ export default function Home() {
               width: 'calc(100vw - 56px)',
               maxWidth: 800,
               height: 800,
-              maxHeight: 'calc(100dvh - 56px)',
+                // Reserve extra space at the bottom so the window never hugs the taskbar
+                maxHeight: 'calc(100dvh - 56px - 24px)',
               minHeight: 0,
               zIndex: 2
             }}>
               <motion.div
-                initial={{ opacity: 0, scale: 0.92, filter: 'blur(6px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, scale: 0.96, filter: 'blur(6px)' }}
-                transition={{
-                  default: { type: 'spring', stiffness: 380, damping: 28, mass: 0.9 },
-                  opacity: { duration: 0.18, ease: 'easeOut' },
-                  filter: { duration: 0.22, ease: 'easeOut' }
-                }}
                 className="window"
                 style={{
                   width: '100%',
@@ -743,6 +745,52 @@ export default function Home() {
             </div>
           )}
         </AnimatePresence>
+      </div>
+
+      {/* Bottom taskbar: Finish button (left) and inset clock (right) */}
+      <div
+        aria-hidden
+        style={{
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 32,
+          background: '#c0c0c0',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '2px',
+          zIndex: 5,
+          borderTop: '1px solid #DFDFDF',
+          borderLeft: '1px solid #DFDFDF',
+          borderRight: '1px solid #000000',
+          borderBottom: '1px solid #000000',
+          boxShadow: 'inset 0 1px 0 #FFFFFF, inset 0 -1px 0 #808080, inset 1px 0 0 #FFFFFF, inset -1px 0 0 #808080'
+        }}
+      >
+        <button
+          type="button"
+          className="default"
+          onPointerDown={playSubmitClick}
+          style={{
+            minWidth: 80,
+            margin: 0,
+            paddingLeft: 8,
+            paddingRight: 8,
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 2, height: '100%' }}>
+            <Image src="/info.png" alt="" width={14} height={14} />
+            <span style={{ fontWeight: 700 }}>About</span>
+          </span>
+        </button>
+        <div style={{ flex: 1 }} />
+        <div className="status-bar" aria-hidden style={{ margin: 0 }}>
+          <p className="status-bar-field" style={{ padding: '2px 4px', textAlign: 'center', margin: 0, color: '#000' }}>{clock}</p>
+        </div>
       </div>
     </main>
   )
