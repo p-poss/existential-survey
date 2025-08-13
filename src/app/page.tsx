@@ -326,59 +326,70 @@ export default function Home() {
 
   const startCelebrationMusic = () => {
     const ctx = ensureCtx()
-    if (!ctx) return
+    // Always reset any existing state
     stopCelebrationMusic()
 
-    const gain = ctx.createGain()
-    gain.gain.value = 0.06
+    let intervalId: number | undefined
+    let strobeId: number | undefined
+    let gain: GainNode | undefined
+    let filter: BiquadFilterNode | undefined
+    let pan: StereoPannerNode | undefined
+    let osc1: OscillatorNode | undefined
+    let osc2: OscillatorNode | undefined
 
-    const filter = ctx.createBiquadFilter()
-    filter.type = 'lowpass'
-    filter.frequency.value = 1800
+    // If audio context is available, start simple chip-tune loop
+    if (ctx) {
+      gain = ctx.createGain()
+      gain.gain.value = 0.06
 
-    const pan = ctx.createStereoPanner()
-    pan.pan.value = 0
+      filter = ctx.createBiquadFilter()
+      filter.type = 'lowpass'
+      filter.frequency.value = 1800
 
-    const notesHz = [220, 262, 294, 330, 392, 440]
-    const pattern = [0, 2, 1, 3, 4, 2, 5, 3]
-    let step = 0
+      pan = ctx.createStereoPanner()
+      pan.pan.value = 0
 
-    const osc1 = ctx.createOscillator()
-    const osc2 = ctx.createOscillator()
-    osc1.type = 'square'
-    osc2.type = 'square'
-    osc1.detune.value = -6
-    osc2.detune.value = +6
+      const notesHz = [220, 262, 294, 330, 392, 440]
+      const pattern = [0, 2, 1, 3, 4, 2, 5, 3]
+      let step = 0
 
-    osc1.connect(filter)
-    osc2.connect(filter)
-    filter.connect(gain).connect(pan).connect(ctx.destination)
+      osc1 = ctx.createOscillator()
+      osc2 = ctx.createOscillator()
+      osc1.type = 'square'
+      osc2.type = 'square'
+      osc1.detune.value = -6
+      osc2.detune.value = +6
 
-    const setFrequencies = () => {
-      const base = notesHz[pattern[step % pattern.length]]
-      osc1.frequency.setTargetAtTime(base, ctx.currentTime, 0.01)
-      osc2.frequency.setTargetAtTime(base * 2, ctx.currentTime, 0.01)
-      const p = Math.sin(step / 4) * 0.4
-      pan.pan.setTargetAtTime(p, ctx.currentTime, 0.05)
-      step += 1
+      osc1.connect(filter)
+      osc2.connect(filter)
+      filter.connect(gain).connect(pan).connect(ctx.destination)
+
+      const setFrequencies = () => {
+        const base = notesHz[pattern[step % pattern.length]]
+        osc1!.frequency.setTargetAtTime(base, ctx.currentTime, 0.01)
+        osc2!.frequency.setTargetAtTime(base * 2, ctx.currentTime, 0.01)
+        const p = Math.sin(step / 4) * 0.4
+        pan!.pan.setTargetAtTime(p, ctx.currentTime, 0.05)
+        step += 1
+      }
+
+      setFrequencies()
+      osc1.start()
+      osc2.start()
+      intervalId = window.setInterval(setFrequencies, 260)
     }
 
-    setFrequencies()
-    osc1.start()
-    osc2.start()
-
-    const intervalId = window.setInterval(setFrequencies, 260)
-    // Background color strobe (navy <-> teal) at same timing as before
+    // Background color strobe (navy <-> teal) always runs, even if audio is blocked
     const bg = document.getElementById('bg-root') as HTMLElement | null
     if (bg) bg.style.backgroundColor = '#000080'
     let isNavy = true
-    const strobeId = window.setInterval(() => {
+    strobeId = window.setInterval(() => {
       const el = document.getElementById('bg-root') as HTMLElement | null
       if (!el) return
       isNavy = !isNavy
       el.style.backgroundColor = isNavy ? '#000080' : '#008080'
     }, 400)
-    musicRef.current = { intervalId, strobeId, gain, filter, pan, oscs: [osc1, osc2] }
+    musicRef.current = { intervalId, strobeId, gain, filter, pan, oscs: osc1 && osc2 ? [osc1, osc2] : [] }
   }
 
   // Keyboard navigation
@@ -403,6 +414,7 @@ export default function Home() {
   }, [currentQuestion, isWindowOpen])
 
   // Stop music if window closes or completion view exits
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isWindowOpen || !isComplete) {
       if (isCelebrating) {
@@ -411,7 +423,7 @@ export default function Home() {
       stopCelebrationMusic()
     }
     return () => stopCelebrationMusic()
-  }, [isWindowOpen, isComplete, isCelebrating])
+  }, [isWindowOpen, isComplete])
 
   // Deselect icon when clicking outside the icon area
   useEffect(() => {
@@ -697,6 +709,8 @@ export default function Home() {
                 className="default"
                 onPointerDown={playSubmitClick}
                 onClick={() => {
+                  // Ensure audio context resumes after a direct user gesture
+                  try { ensureCtx()?.resume(); } catch {}
                   setIsCelebrating(prev => {
                     const next = !prev
                     if (next) startCelebrationMusic(); else stopCelebrationMusic()
