@@ -16,6 +16,8 @@ export interface SurveyResponse {
   q13: string
   q1_option?: string
   completion_time?: number
+  login_age?: number | null
+  login_location?: string | null
 }
 
 export interface SurveyQuestion {

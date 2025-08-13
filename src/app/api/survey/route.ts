@@ -32,7 +32,10 @@ export async function POST(request: NextRequest) {
       q12: body.q12 ? body.q12.trim() : "",
       q13: body.q13 ? body.q13.trim() : "",
       q1_option: body.q1_option || null,
-      completion_time: body.completion_time || null
+      completion_time: body.completion_time || null,
+      // Login window metadata (optional)
+      login_age: body.login_age ?? null,
+      login_location: body.login_location ? String(body.login_location).trim() : null
     }
 
     // Insert into Supabase
