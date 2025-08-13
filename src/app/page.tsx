@@ -288,10 +288,10 @@ export default function Home() {
     try { current.filter?.disconnect(); } catch {}
     try { current.gain?.disconnect(); } catch {}
     try { current.pan?.disconnect(); } catch {}
-    // Ensure strobe is cleared
+    // Restore background color to default teal
     try {
-      const bg = document.getElementById('bg-root')
-      if (bg) bg.classList.remove('strobe-invert')
+      const bg = document.getElementById('bg-root') as HTMLElement | null
+      if (bg) bg.style.backgroundColor = '#008080'
     } catch {}
     musicRef.current = null
   }
@@ -340,13 +340,15 @@ export default function Home() {
     osc2.start()
 
     const intervalId = window.setInterval(setFrequencies, 260)
-    // Immediately toggle strobe once, then every 300ms
-    const bg = document.getElementById('bg-root')
-    if (bg) bg.classList.toggle('strobe-invert')
+    // Background color strobe (navy <-> teal) at same timing as before
+    const bg = document.getElementById('bg-root') as HTMLElement | null
+    if (bg) bg.style.backgroundColor = '#000080'
+    let isNavy = true
     const strobeId = window.setInterval(() => {
-      const el = document.getElementById('bg-root')
+      const el = document.getElementById('bg-root') as HTMLElement | null
       if (!el) return
-      el.classList.toggle('strobe-invert')
+      isNavy = !isNavy
+      el.style.backgroundColor = isNavy ? '#000080' : '#008080'
     }, 400)
     musicRef.current = { intervalId, strobeId, gain, filter, pan, oscs: [osc1, osc2] }
   }
