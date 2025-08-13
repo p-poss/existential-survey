@@ -145,6 +145,8 @@ export default function Home() {
   const [isIconSelected, setIsIconSelected] = useState(false)
   const [isCelebrating, setIsCelebrating] = useState(false)
   const [showLogin, setShowLogin] = useState(true)
+  const [loginAge, setLoginAge] = useState<string>('')
+  const [loginLocation, setLoginLocation] = useState<string>('')
   const iconRef = useRef<HTMLDivElement | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
   const musicRef = useRef<{
@@ -427,7 +429,9 @@ export default function Home() {
         },
         body: JSON.stringify({
           ...formData,
-          completion_time: completionTime
+          completion_time: completionTime,
+          login_age: loginAge ? Number(loginAge) : null,
+          login_location: loginLocation || null
         }),
       })
 
@@ -472,9 +476,9 @@ export default function Home() {
                   <button aria-label="Close" onClick={() => setShowLogin(false)} />
                 </div>
               </div>
-              <form className="window-body" onSubmit={handleLoginOk}>
+              <form className="window-body" onSubmit={handleLoginOk} style={{ paddingBottom: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ width: 48, display: 'flex', justifyContent: 'center' }}>
+                  <div style={{ width: 48, display: 'flex', justifyContent: 'center', marginLeft: 8, marginRight: 8 }}>
                     <Image src="/keys.png" alt="" width={48} height={48} />
                   </div>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -484,11 +488,11 @@ export default function Home() {
                     </div>
                     <div className="field-row" style={{ alignItems: 'center', gap: 8 }}>
                       <label htmlFor="login-pass" style={{ minWidth: 80 }}><u>A</u>ge:</label>
-                      <input id="login-pass" type="password" autoFocus />
+                      <input id="login-pass" type="password" value={loginAge} onChange={(e) => setLoginAge(e.target.value)} autoFocus />
                     </div>
                     <div className="field-row" style={{ alignItems: 'center', gap: 8, marginTop: 8 }}>
                       <label htmlFor="login-location" style={{ minWidth: 80 }}><u>L</u>ocation:</label>
-                      <input id="login-location" type="text" />
+                      <input id="login-location" type="text" value={loginLocation} onChange={(e) => setLoginLocation(e.target.value)} />
                     </div>
                   </div>
                 </div>
