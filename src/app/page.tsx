@@ -497,7 +497,7 @@ export default function Home() {
                     </div>
                     <div className="field-row" style={{ alignItems: 'center', gap: 8 }}>
                       <label htmlFor="login-location" style={{ minWidth: 80 }}><u>L</u>ocation:</label>
-                      <input id="login-location" type="text" value={loginLocation} onChange={(e) => setLoginLocation(e.target.value)} onFocus={playInputFocus} autoFocus />
+                      <input id="login-location" type="text" value={loginLocation} onChange={(e) => setLoginLocation(e.target.value)} onFocus={playInputFocus} />
                     </div>
                     <div className="field-row" style={{ alignItems: 'center', gap: 8, marginTop: 8 }}>
                       <label htmlFor="login-pass" style={{ minWidth: 80 }}><u>A</u>ge:</label>
