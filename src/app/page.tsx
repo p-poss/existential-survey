@@ -32,7 +32,7 @@ function QuestionText({
 function TitleBar({ onClose }: { onClose: () => void }) {
   return (
     <div className="title-bar">
-      <div className="title-bar-text">"...Contemplate Before We Die"</div>
+      <div className="title-bar-text">&quot;...Contemplate Before We Die&quot;</div>
       <div className="title-bar-controls">
         <button aria-label="Close" onClick={onClose} />
       </div>
@@ -403,7 +403,6 @@ export default function Home() {
   }, [currentQuestion, isWindowOpen])
 
   // Stop music if window closes or completion view exits
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isWindowOpen || !isComplete) {
       if (isCelebrating) {
@@ -412,7 +411,7 @@ export default function Home() {
       stopCelebrationMusic()
     }
     return () => stopCelebrationMusic()
-  }, [isWindowOpen, isComplete])
+  }, [isWindowOpen, isComplete, isCelebrating])
 
   // Deselect icon when clicking outside the icon area
   useEffect(() => {
@@ -480,7 +479,7 @@ export default function Home() {
           }}>
             <div className="window" role="dialog" aria-modal="true" aria-label="Welcome to Windows">
               <div className="title-bar">
-                <div className="title-bar-text">Welcome to "13 Questions To Contemplate..."</div>
+                <div className="title-bar-text">Welcome to &quot;13 Questions To Contemplate...&quot;</div>
                 <div className="title-bar-controls">
                   <button aria-label="Close" onClick={() => { playCloseSwoosh(); setShowLogin(false); }} />
                 </div>
