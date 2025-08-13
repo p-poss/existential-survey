@@ -144,6 +144,7 @@ export default function Home() {
   const [isWindowOpen, setIsWindowOpen] = useState(false)
   const [isIconSelected, setIsIconSelected] = useState(false)
   const [isCelebrating, setIsCelebrating] = useState(false)
+  const [showLogin, setShowLogin] = useState(true)
   const iconRef = useRef<HTMLDivElement | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
   const musicRef = useRef<{
@@ -443,11 +444,58 @@ export default function Home() {
     }
   }
 
+  const handleLoginOk = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setShowLogin(false)
+  }
+
   // When complete, keep rendering the same window structure
 
   return (
     <main className="h-[100dvh] w-full">
       <div className="relative w-full h-full">
+        {/* Login window shown on page load */}
+        {showLogin && (
+          <div style={{
+            position: 'absolute',
+            left: '50%',
+            top: '40%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 3,
+            width: 420,
+            maxWidth: 'calc(100vw - 40px)'
+          }}>
+            <div className="window" role="dialog" aria-modal="true" aria-label="Welcome to Windows">
+              <div className="title-bar">
+                <div className="title-bar-text">Welcome to IsThis.Life</div>
+                <div className="title-bar-controls">
+                  <button aria-label="Close" onClick={() => setShowLogin(false)} />
+                </div>
+              </div>
+              <form className="window-body" onSubmit={handleLoginOk}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                  <div style={{ width: 48, display: 'flex', justifyContent: 'center' }}>
+                    <Image src="/keys.png" alt="" width={48} height={48} />
+                  </div>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginTop: 0, marginBottom: 8 }}>
+                      <p style={{ margin: 0 }}>Type your general current age for the survey.</p>
+                      <button type="submit" className="default">OK</button>
+                    </div>
+                    <div className="field-row" style={{ alignItems: 'center', gap: 8 }}>
+                      <label htmlFor="login-pass" style={{ minWidth: 80 }}><u>A</u>ge:</label>
+                      <input id="login-pass" type="password" autoFocus />
+                    </div>
+                    <div className="field-row" style={{ alignItems: 'center', gap: 8, marginTop: 8 }}>
+                      <label htmlFor="login-location" style={{ minWidth: 80 }}><u>L</u>ocation:</label>
+                      <input id="login-location" type="text" />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
         {/* Desktop icon always present and centered */}
         <div
           ref={iconRef}
@@ -484,7 +532,7 @@ export default function Home() {
             backgroundColor: 'transparent',
             boxShadow: 'none',
           }}>
-            <Image src="/File-3.png" alt="Anonymous Survey file icon" width={48} height={48} priority />
+            <Image src="/file-4.png" alt="Anonymous Survey file icon" width={48} height={48} priority />
           </div>
           <div style={{
             marginTop: 3,
