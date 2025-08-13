@@ -66,17 +66,33 @@ function InteractiveElements({
   return (
     <div>
       {currentQ.type === 'text' ? (
-        <div className="field-row">
-          <input
-            type="text"
-            value={formData[fieldName] || ''}
-            onChange={(e) => onInputChange(e.target.value)}
-            placeholder="Type here..."
-            onFocus={onWriteInFocus}
-            autoComplete="off"
-            style={{ width: '100%' }}
-          />
-        </div>
+        currentQ.id === 9 ? (
+          <div className="field-row" style={{ alignItems: 'center', gap: 8 }}>
+            <input
+              type="range"
+              min={18}
+              max={118}
+              step={1}
+              value={Number(formData[fieldName] ?? 68)}
+              onChange={(e) => onInputChange(e.target.value)}
+              aria-label="Select a value from 18 to 118"
+              style={{ flex: 1 }}
+            />
+            <span style={{ minWidth: 32, textAlign: 'right' }}>{formData[fieldName] ?? '68'}</span>
+          </div>
+        ) : (
+          <div className="field-row">
+            <input
+              type="text"
+              value={formData[fieldName] || ''}
+              onChange={(e) => onInputChange(e.target.value)}
+              placeholder="Type here..."
+              onFocus={onWriteInFocus}
+              autoComplete="off"
+              style={{ width: '100%' }}
+            />
+          </div>
+        )
       ) : (
         <div>
           {currentQ.options?.map((option) => {
