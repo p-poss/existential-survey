@@ -320,6 +320,7 @@ export default function Home() {
     try {
       const bg = document.getElementById('bg-root') as HTMLElement | null
       if (bg) bg.style.backgroundColor = '#008080'
+      document.body.style.backgroundColor = '#008080'
     } catch {}
     musicRef.current = null
   }
@@ -330,7 +331,6 @@ export default function Home() {
     stopCelebrationMusic()
 
     let intervalId: number | undefined
-    let strobeId: number | undefined
     let gain: GainNode | undefined
     let filter: BiquadFilterNode | undefined
     let pan: StereoPannerNode | undefined
@@ -382,12 +382,15 @@ export default function Home() {
     // Background color strobe (navy <-> teal) always runs, even if audio is blocked
     const bg = document.getElementById('bg-root') as HTMLElement | null
     if (bg) bg.style.backgroundColor = '#000080'
+    document.body.style.backgroundColor = '#000080'
     let isNavy = true
-    strobeId = window.setInterval(() => {
+    const strobeId = window.setInterval(() => {
       const el = document.getElementById('bg-root') as HTMLElement | null
       if (!el) return
       isNavy = !isNavy
-      el.style.backgroundColor = isNavy ? '#000080' : '#008080'
+      const color = isNavy ? '#000080' : '#008080'
+      el.style.backgroundColor = color
+      document.body.style.backgroundColor = color
     }, 400)
     musicRef.current = { intervalId, strobeId, gain, filter, pan, oscs: osc1 && osc2 ? [osc1, osc2] : [] }
   }
@@ -417,12 +420,9 @@ export default function Home() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isWindowOpen || !isComplete) {
-      if (isCelebrating) {
-        setIsCelebrating(false)
-      }
+      if (isCelebrating) setIsCelebrating(false)
       stopCelebrationMusic()
     }
-    return () => stopCelebrationMusic()
   }, [isWindowOpen, isComplete])
 
   // Deselect icon when clicking outside the icon area
