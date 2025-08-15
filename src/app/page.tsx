@@ -205,7 +205,11 @@ export default function Home() {
 
   // Taskbar clock updater
   useEffect(() => {
-    const update = () => setClock(new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }))
+    const update = () => setClock(new Date().toLocaleTimeString([], { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    }))
     update()
     const id = window.setInterval(update, 30_000)
     return () => window.clearInterval(id)
