@@ -151,3 +151,28 @@ button, input, label, h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 /* Removed patterned background */
+
+/* Prevent mobile zoom on input focus - MOBILE ONLY */
+@media (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important; /* Minimum size to prevent mobile zoom */
+    touch-action: manipulation; /* Prevents double-tap zoom */
+  }
+
+  /* Ensure 98.css inputs also respect the no-zoom rule */
+  .window input, .window textarea, .window select {
+    font-size: 16px !important;
+    touch-action: manipulation;
+  }
+
+  /* Override any specific font sizes that might be too small */
+  input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
+    font-size: 16px !important;
+  }
+
+  /* Range input can keep smaller font size since it doesn't trigger zoom */
+  input[type="range"] {
+    font-size: inherit;
+    touch-action: manipulation;
+  }
+}
