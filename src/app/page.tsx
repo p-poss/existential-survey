@@ -205,11 +205,15 @@ export default function Home() {
 
   // Taskbar clock updater
   useEffect(() => {
-    const update = () => setClock(new Date().toLocaleTimeString([], { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: true 
-    }))
+    const update = () => {
+      const timeString = new Date().toLocaleTimeString([], { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      })
+      // Force AM/PM to uppercase for consistent display across all devices
+      setClock(timeString.replace(/\s?(am|pm)/i, (match) => ` ${match.toUpperCase()}`))
+    }
     update()
     const id = window.setInterval(update, 30_000)
     return () => window.clearInterval(id)
@@ -591,7 +595,7 @@ export default function Home() {
             boxShadow: 'none'
           }}>
             <div>13 Questions To</div>
-            <div>Contem...re We Die</div>
+            <div>Contemplate Before We Die</div>
           </div>
         </div>
 
