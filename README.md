@@ -1,5 +1,24 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Email Functionality Setup
+
+To enable the email functionality for survey answers:
+
+1. **Sign up for Resend** at [https://resend.com](https://resend.com)
+2. **Get your API key** from the Resend dashboard
+3. **Create a `.env.local` file** in your project root with:
+   ```
+   RESEND_API_KEY=re_e58MMbj3_7vH99FadtbTTCCUGvkrMAtkp
+   FROM_EMAIL=noreply@isthis.life
+   ```
+4. **Verify your domain** in Resend:
+   - Go to [resend.com/domains](https://resend.com/domains)
+   - Add domain: `isthis.life`
+   - Follow DNS verification steps
+   - Or temporarily use: `onboarding@resend.dev` for testing
+
+The email functionality allows users to receive a copy of their survey answers after completion.
+
 ## Getting Started
 
 First, run the development server:

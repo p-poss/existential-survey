@@ -148,6 +148,9 @@ export default function Home() {
   const [clock, setClock] = useState<string>('')
   const [loginAge, setLoginAge] = useState<string>('')
   const [loginLocation, setLoginLocation] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [isEmailing, setIsEmailing] = useState(false)
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const iconRef = useRef<HTMLDivElement | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
   const musicRef = useRef<{
@@ -476,6 +479,50 @@ export default function Home() {
     }
   }
 
+  const handleSendEmail = async () => {
+    if (!email.trim()) {
+      alert('Please enter your email address')
+      return
+    }
+
+    setIsEmailing(true)
+    setEmailStatus('sending')
+
+    // Add a small delay before sending for better UX
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    try {
+      const response = await fetch('/api/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          formData: {
+            ...formData,
+            completion_time: Math.round((Date.now() - startTime) / 1000),
+            login_age: loginAge ? Number(loginAge) : null,
+            login_location: loginLocation || null
+          }
+        }),
+      })
+
+      if (response.ok) {
+        setEmailStatus('success')
+        // Reset to idle after 3 seconds
+        setTimeout(() => setEmailStatus('idle'), 3000)
+      } else {
+        throw new Error('Email failed to send')
+      }
+    } catch (error) {
+      console.error('Error sending email:', error)
+      setEmailStatus('error')
+    } finally {
+      setIsEmailing(false)
+    }
+  }
+
   const handleLoginOk = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setShowLogin(false)
@@ -663,17 +710,36 @@ export default function Home() {
             {/* Chunk 2: Question text or completion */}
                 <div className="pt-3 px-3">
               {isComplete ? (
-                <h2
-                      className="text-center mb-4"
-                  style={{
-                        fontSize: '15px',
-                        lineHeight: '22px',
-                        minHeight: '44px',
-                        fontWeight: 600
-                  }}
-                >
-                  Responses submitted anonymously.
-                </h2>
+                <div>
+                  <h2
+                    className="text-center mb-4"
+                    style={{
+                      fontSize: '15px',
+                      lineHeight: '22px',
+                      minHeight: '44px',
+                      fontWeight: 600
+                    }}
+                  >
+                    Responses submitted anonymously.
+                  </h2>
+                  
+                  {/* Email input section */}
+                  <div className="mb-4">
+                    <div className="field-row" style={{ alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                      <label htmlFor="email-input" style={{ minWidth: 80 }}><u>E</u>mail:</label>
+                      <input
+                        id="email-input"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="your@email.com"
+                        onFocus={playInputFocus}
+                        style={{ width: '100%' }}
+                        disabled={isEmailing}
+                      />
+                    </div>
+                  </div>
+                </div>
               ) : (
                 <QuestionText currentQuestion={currentQuestion} />
               )}
@@ -711,7 +777,7 @@ export default function Home() {
         {/* Chunk 4: Footer area; actions */}
         <div className="window-body" style={{ padding: 12 }}>
           {isComplete ? (
-            <div className="w-full">
+            <div className="w-full flex gap-3">
               <button
                 type="button"
                 className="default"
@@ -727,6 +793,19 @@ export default function Home() {
                 }}
               >
                 {isCelebrating ? 'Stop The Party' : 'Let\u2019s Celebrate'}
+              </button>
+              
+              <button
+                type="button"
+                className="default"
+                onPointerDown={playSubmitClick}
+                onClick={handleSendEmail}
+                disabled={isEmailing || (!email.trim() && emailStatus !== 'error')}
+              >
+                {emailStatus === 'sending' ? 'Sending...' : 
+                 emailStatus === 'success' ? 'Email Success' : 
+                 emailStatus === 'error' ? 'Retry Email' : 
+                 'Email Answers'}
               </button>
             </div>
           ) : (
