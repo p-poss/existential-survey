@@ -723,6 +723,11 @@ export default function Home() {
                     Responses submitted anonymously.
                   </h2>
                   
+                  {/* Explanatory text */}
+                  <p style={{ margin: 0, marginBottom: 16, textAlign: 'center' }}>
+                    For a copy of your answers, please provide your email and press the right button.
+                  </p>
+                  
                   {/* Email input section */}
                   <div className="mb-4">
                     <div className="field-row" style={{ alignItems: 'center', gap: 8, marginBottom: 8 }}>
