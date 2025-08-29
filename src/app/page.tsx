@@ -429,13 +429,12 @@ export default function Home() {
   }, [currentQuestion, isWindowOpen])
 
   // Stop music if window closes or completion view exits
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isWindowOpen || !isComplete) {
       if (isCelebrating) setIsCelebrating(false)
       stopCelebrationMusic()
     }
-  }, [isWindowOpen, isComplete])
+  }, [isWindowOpen, isComplete, isCelebrating])
 
   // Deselect icon when clicking outside the icon area
   useEffect(() => {
@@ -892,7 +891,7 @@ export default function Home() {
             <div style={{ flex: 1, padding: '12px' }}>
               <div style={{ padding: '8px 0' }}>
                 <p style={{ margin: '0 0 8px 0', fontSize: '12px' }}>
-                  <strong>"13 Questions To Contemplate Before We Die"</strong>
+                  <strong>&quot;13 Questions To Contemplate Before We Die&quot;</strong>
                 </p>
                 <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
                   A design research experiment exploring anonymous existential thoughts.
