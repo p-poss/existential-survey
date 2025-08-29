@@ -540,7 +540,7 @@ export default function Home() {
             left: '50%',
             top: '50%',
             transform: 'translate(-50%, -50%)',
-            zIndex: 3,
+            zIndex: 4,
             width: 420,
             maxWidth: 'calc(100vw - 40px)'
           }}>
@@ -660,7 +660,7 @@ export default function Home() {
                 // Reserve extra space at the bottom so the window never hugs the taskbar
                 maxHeight: 'calc(100dvh - 56px - 24px)',
               minHeight: 0,
-              zIndex: 2
+              zIndex: 3
             }}>
               <motion.div
                 className="window"
@@ -859,7 +859,7 @@ export default function Home() {
             position: 'fixed',
             left: 3,
             bottom: 32, // Position above the taskbar (taskbar height is 32px)
-            zIndex: 6,
+            zIndex: 2,
             minWidth: 200
           }}
         >
