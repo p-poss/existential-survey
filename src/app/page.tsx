@@ -883,8 +883,8 @@ export default function Home() {
                 borderRight: '1px solid #808080'
               }}
             >
-              <div style={{ transform: 'rotate(-90deg)', transformOrigin: 'center', marginBottom: '20px', fontFamily: 'Arial, sans-serif', letterSpacing: '0px' }}>
-                About
+              <div style={{ transform: 'rotate(-90deg)', transformOrigin: 'center', marginBottom: '35px', fontFamily: 'Arial, sans-serif', letterSpacing: '0px', fontWeight: 'bold' }}>
+                About<span style={{ fontFamily: 'Arial, sans-serif', fontWeight: '100' }}>13</span>
               </div>
             </div>
             
