@@ -554,7 +554,7 @@ export default function Home() {
               <form className="window-body" onSubmit={handleLoginOk} style={{ paddingBottom: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                   <div style={{ width: 48, display: 'flex', justifyContent: 'center', marginLeft: 8, marginRight: 8 }}>
-                    <Image src="/keys.png" alt="" width={48} height={48} />
+                    <Image src="/keys.png" alt="" width={48} height={48} priority />
                   </div>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginTop: 0, marginBottom: 8 }}>
@@ -911,7 +911,7 @@ export default function Home() {
                   background: 'linear-gradient(to bottom, #808080 0px, #808080 1px, #FFFFFF 1px, #FFFFFF 2px)'
                 }} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginTop: '8px', position: 'relative', left: '-12px' }}>
-                  <Image src="/shut_down.png" alt="Restart" width={48} height={48} />
+                  <Image src="/shut_down.png" alt="Restart" width={48} height={48} priority />
                   <span style={{ fontSize: '13px', lineHeight: '12px', color: '#000' }}><u>R</u>estart</span>
                 </div>
               </div>
@@ -957,7 +957,7 @@ export default function Home() {
           }}
         >
           <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 2, height: '100%' }}>
-            <Image src="/info.png" alt="" width={14} height={14} />
+            <Image src="/info.png" alt="" width={14} height={14} priority />
             <span style={{ fontWeight: 700 }}>About</span>
           </span>
         </button>
