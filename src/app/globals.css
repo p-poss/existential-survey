@@ -183,17 +183,20 @@ button, input, label, h1, h2, h3, h4, h5, h6, p, span, div {
   
   /* Override placeholder size on mobile to match desktop size */
   input::placeholder, textarea::placeholder, select::placeholder {
-    font-size: 14px !important; /* Same size as desktop */
+    font-size: 11px !important; /* Same size as desktop */
+    line-height: 22px !important;
   }
   
   /* Ensure 98.css inputs also have consistent placeholder sizing */
   .window input::placeholder, .window textarea::placeholder, .window select::placeholder {
-    font-size: 14px !important;
+    font-size: 11px !important;
+    line-height: 22px !important;
   }
 }
 
 /* Consistent placeholder styling across all devices */
 input::placeholder, textarea::placeholder, select::placeholder {
-  font-size: 14px;
+  font-size: 11px;
+  line-height: 22px;
   color: #666;
 }
