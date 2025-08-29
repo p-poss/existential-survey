@@ -180,4 +180,20 @@ button, input, label, h1, h2, h3, h4, h5, h6, p, span, div {
     font-size: inherit;
     touch-action: manipulation;
   }
+  
+  /* Override placeholder size on mobile to match desktop size */
+  input::placeholder, textarea::placeholder, select::placeholder {
+    font-size: 14px !important; /* Same size as desktop */
+  }
+  
+  /* Ensure 98.css inputs also have consistent placeholder sizing */
+  .window input::placeholder, .window textarea::placeholder, .window select::placeholder {
+    font-size: 14px !important;
+  }
+}
+
+/* Consistent placeholder styling across all devices */
+input::placeholder, textarea::placeholder, select::placeholder {
+  font-size: 14px;
+  color: #666;
 }
