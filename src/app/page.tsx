@@ -858,7 +858,7 @@ export default function Home() {
         <div
           style={{
             position: 'fixed',
-            left: 8,
+            left: 3,
             bottom: 32, // Position above the taskbar (taskbar height is 32px)
             zIndex: 6,
             minWidth: 200
@@ -867,22 +867,24 @@ export default function Home() {
           <div className="window" style={{ display: 'flex' }}>
             {/* Vertical title bar */}
             <div 
+              className="about-vertical-bar"
               style={{
-                width: 24,
+                width: 27,
                 background: 'linear-gradient(to top, #0080FF 0%, #0000FF 50%, #000080 100%)',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'flex-end',
                 justifyContent: 'center',
-                fontSize: '11px',
+                fontSize: '20.5px',
                 fontWeight: 'bold',
                 letterSpacing: '1px',
+                lineHeight: 1,
                 padding: '8px 0',
                 borderRight: '1px solid #808080'
               }}
             >
-              <div style={{ transform: 'rotate(-90deg)', transformOrigin: 'center', marginBottom: '15px' }}>
-                ABOUT
+              <div style={{ transform: 'rotate(-90deg)', transformOrigin: 'center', marginBottom: '20px', fontFamily: 'Arial, sans-serif', letterSpacing: '0px' }}>
+                About
               </div>
             </div>
             

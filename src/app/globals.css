@@ -152,6 +152,11 @@ button, input, label, h1, h2, h3, h4, h5, h6, p, span, div {
 
 /* Removed patterned background */
 
+/* About menu vertical bar - override font */
+.about-vertical-bar {
+  font-family: Arial, sans-serif !important;
+}
+
 /* Prevent mobile zoom on input focus - MOBILE ONLY */
 @media (max-width: 768px) {
   input, textarea, select {
