@@ -145,6 +145,7 @@ export default function Home() {
   const [isIconSelected, setIsIconSelected] = useState(false)
   const [isCelebrating, setIsCelebrating] = useState(false)
   const [showLogin, setShowLogin] = useState(true)
+  const [showAboutMenu, setShowAboutMenu] = useState(false)
   const [clock, setClock] = useState<string>('')
   const [loginAge, setLoginAge] = useState<string>('')
   const [loginLocation, setLoginLocation] = useState<string>('')
@@ -852,6 +853,60 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
+      {/* About Menu */}
+      {showAboutMenu && (
+        <div
+          style={{
+            position: 'fixed',
+            left: 8,
+            bottom: 32, // Position above the taskbar (taskbar height is 32px)
+            zIndex: 6,
+            minWidth: 200
+          }}
+        >
+          <div className="window" style={{ display: 'flex' }}>
+            {/* Vertical title bar */}
+            <div 
+              style={{
+                width: 24,
+                background: 'linear-gradient(to top, #0080FF 0%, #0000FF 50%, #000080 100%)',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                fontSize: '11px',
+                fontWeight: 'bold',
+                letterSpacing: '1px',
+                padding: '8px 0',
+                borderRight: '1px solid #808080'
+              }}
+            >
+              <div style={{ transform: 'rotate(-90deg)', transformOrigin: 'center', marginBottom: '15px' }}>
+                ABOUT
+              </div>
+            </div>
+            
+            {/* Content area */}
+            <div style={{ flex: 1, padding: '12px' }}>
+              <div style={{ padding: '8px 0' }}>
+                <p style={{ margin: '0 0 8px 0', fontSize: '12px' }}>
+                  <strong>13 Questions To Contemplate Before We Die</strong>
+                </p>
+                <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
+                  A design research experiment exploring anonymous existential thoughts.
+                </p>
+                <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
+                  Built with Next.js, 98.css, and Framer Motion.
+                </p>
+                <p style={{ margin: 0, fontSize: '11px', lineHeight: '14px', color: '#666' }}>
+                  Version 0.1.0
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Bottom taskbar: Finish button (left) and inset clock (right) */}
       <div
         aria-hidden
@@ -877,6 +932,7 @@ export default function Home() {
           type="button"
           className="default"
           onPointerDown={playSubmitClick}
+          onClick={() => setShowAboutMenu(!showAboutMenu)}
           style={{
             minWidth: 80,
             margin: 0,
