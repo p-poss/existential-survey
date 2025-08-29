@@ -911,8 +911,8 @@ export default function Home() {
                   background: 'linear-gradient(to bottom, #808080 0px, #808080 1px, #FFFFFF 1px, #FFFFFF 2px)'
                 }} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginTop: '8px', position: 'relative', left: '-12px' }}>
-                  <Image src="/shut_down.png" alt="Shut Down" width={48} height={48} />
-                  <span style={{ fontSize: '13px', lineHeight: '12px', color: '#000' }}>Sh<u>u</u>t Down</span>
+                  <Image src="/shut_down.png" alt="Restart" width={48} height={48} />
+                  <span style={{ fontSize: '13px', lineHeight: '12px', color: '#000' }}><u>R</u>estart</span>
                 </div>
               </div>
             </div>
