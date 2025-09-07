@@ -29,6 +29,12 @@ html, body {
   background-color: #008080;
   color: var(--foreground);
   font-family: var(--font-ms-sans), Tahoma, system-ui, -apple-system, sans-serif;
+  cursor: url('/arrow.png') 0 0, auto;
+}
+
+/* Ensure custom cursor also applies to common interactive elements */
+a, button, [role="button"], input, select, textarea, label {
+  cursor: url('/arrow.png') 0 0, auto;
 }
 
 /* Ensure 98.css window content uses dark text even in dark mode */
@@ -199,4 +205,27 @@ input::placeholder, textarea::placeholder, select::placeholder {
   font-size: 11px;
   line-height: 22px;
   color: #666;
+}
+
+/* Custom cursor for the desktop survey launcher icon and label */
+.survey-launcher,
+.survey-launcher * {
+  cursor: url('/cursor-question.png') 0 0, auto;
+}
+
+.survey-launcher:focus,
+.survey-launcher:hover {
+  cursor: url('/cursor-question.png') 0 0, auto;
+}
+
+/* Wait cursor applied globally when submitting */
+.body-wait,
+.body-wait * {
+  cursor: url('/cursor-wait.png') 0 0, wait !important;
+}
+
+/* Custom pointer cursor over Restart control */
+.restart-control,
+.restart-control * {
+  cursor: url('/cursor-pointer.png') 6 2, pointer !important;
 }

@@ -479,6 +479,20 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    try {
+      const body = document.body
+      if (isSubmitting || isEmailing) {
+        body.classList.add('body-wait')
+      } else {
+        body.classList.remove('body-wait')
+      }
+    } catch {}
+    return () => {
+      try { document.body.classList.remove('body-wait') } catch {}
+    }
+  }, [isSubmitting, isEmailing])
+
   const handleSendEmail = async () => {
     if (!email.trim()) {
       alert('Please enter your email address')
@@ -526,6 +540,27 @@ export default function Home() {
   const handleLoginOk = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setShowLogin(false)
+  }
+
+  const hardReset = async () => {
+    try {
+      localStorage.clear()
+      sessionStorage.clear()
+
+      if ('caches' in window) {
+        const keys = await caches.keys()
+        await Promise.all(keys.map((k) => caches.delete(k)))
+      }
+
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations()
+        await Promise.all(regs.map((r) => r.unregister()))
+      }
+    } catch {}
+
+    const url = new URL(window.location.href)
+    url.searchParams.set('restart', Date.now().toString())
+    window.location.replace(url.toString())
   }
 
   // When complete, keep rendering the same window structure
@@ -586,6 +621,7 @@ export default function Home() {
           onClick={() => setIsIconSelected(true)}
           onDoubleClick={() => { setIsIconSelected(false); playOpenSwoosh(); setIsWindowOpen(true) }}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { playClick(); playOpenSwoosh(); setIsIconSelected(false); setIsWindowOpen(true) } }}
+          className="survey-launcher"
           style={{
             position: 'absolute',
             left: '50%',
@@ -595,7 +631,6 @@ export default function Home() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'default',
             userSelect: 'none',
             pointerEvents: isWindowOpen ? 'none' : 'auto',
             zIndex: 1
@@ -910,7 +945,7 @@ export default function Home() {
                   margin: '16px 0 8px 0',
                   background: 'linear-gradient(to bottom, #808080 0px, #808080 1px, #FFFFFF 1px, #FFFFFF 2px)'
                 }} />
-                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginTop: '8px', position: 'relative', left: '-12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginTop: '8px', position: 'relative', left: '-12px' }} onPointerDown={playSubmitClick} onClick={hardReset} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playSubmitClick(); hardReset(); } }} className="restart-control">
                   <Image src="/shut_down.png" alt="Restart" width={48} height={48} priority />
                   <span style={{ fontSize: '13px', lineHeight: '12px', color: '#000' }}><u>R</u>estart</span>
                 </div>

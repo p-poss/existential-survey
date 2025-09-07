@@ -29,3 +29,90 @@
  GET / 200 in 136ms
  GET /favicon.ico?favicon.45db1c09.ico 200 in 223ms
  POST /api/survey 201 in 334ms
+   ▲ Next.js 15.4.5
+   - Local:        http://localhost:4200
+   - Network:      http://192.168.1.33:4200
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1064ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1161ms (1385 modules)
+ GET / 200 in 1360ms
+ ✓ Compiled /favicon.ico in 147ms (753 modules)
+ GET /favicon.ico 200 in 206ms
+ ✓ Compiled in 234ms (1376 modules)
+ GET / 200 in 72ms
+ ✓ Compiled in 131ms (1376 modules)
+ GET / 200 in 41ms
+ GET / 200 in 123ms
+ ✓ Compiled /favicon.ico in 66ms (753 modules)
+ GET /favicon.ico 200 in 121ms
+ GET / 200 in 125ms
+ GET /favicon.ico 200 in 4ms
+ GET /favicon.ico 200 in 5ms
+ ✓ Compiled in 292ms (1402 modules)
+ GET / 200 in 47ms
+ ✓ Compiled in 240ms (1376 modules)
+ GET / 200 in 70ms
+ ✓ Compiled in 111ms (1376 modules)
+ GET / 200 in 41ms
+ ✓ Compiled in 246ms (1376 modules)
+ GET / 200 in 22ms
+ ✓ Compiled /api/survey in 322ms (1491 modules)
+ POST /api/survey 201 in 404ms
+ GET / 200 in 111ms
+ ⚠ The requested resource "/party.gif" is an animated image so it will not be optimized. Consider adding the "unoptimized" property to the <Image>.
+ GET /?restart=1757243029464 200 in 112ms
+ ✓ Compiled /favicon.ico in 96ms (852 modules)
+ GET /favicon.ico 200 in 121ms
+ POST /api/survey 201 in 39ms
+ ✓ Compiled in 222ms (1491 modules)
+ GET /?restart=1757243029464 200 in 41ms
+ ✓ Compiled in 130ms (1491 modules)
+ GET /?restart=1757243029464 200 in 25ms
+ ✓ Compiled in 169ms (1377 modules)
+ GET /?restart=1757243029464 200 in 67ms
+ ✓ Compiled /api/survey in 79ms (850 modules)
+ POST /api/survey 201 in 149ms
+ ✓ Compiled /api/email in 201ms (1482 modules)
+ POST /api/email 200 in 861ms
+ ✓ Compiled in 192ms (1496 modules)
+ GET /?restart=1757243029464 200 in 53ms
+ ✓ Compiled in 144ms (1496 modules)
+ GET /?restart=1757243029464 200 in 36ms
+ GET /?restart=1757243029464 200 in 119ms
+ ✓ Compiled /favicon.ico in 108ms (857 modules)
+ GET /favicon.ico 200 in 127ms
+ POST /api/survey 201 in 42ms
+ POST /api/email 200 in 579ms
+ GET /?restart=1757243029464 200 in 104ms
+ GET /favicon.ico 200 in 7ms
+ POST /api/survey 201 in 8ms
+ GET /?restart=1757243218160 200 in 40ms
+ GET /?restart=1757243218160 200 in 40ms
+ GET /favicon.ico 200 in 4ms
+ GET / 200 in 41ms
+ GET /favicon.ico 200 in 11ms
+ POST /api/survey 201 in 13ms
+ GET / 200 in 39ms
+ GET /favicon.ico 200 in 3ms
+ GET /favicon.ico 200 in 8ms
+ ✓ Compiled in 261ms (1394 modules)
+ GET / 200 in 33ms
+ ✓ Compiled in 117ms (1394 modules)
+ GET / 200 in 31ms
+ ✓ Compiled in 131ms (1394 modules)
+ GET / 200 in 22ms
+ GET / 200 in 64ms
+ GET /favicon.ico 200 in 11ms
+ GET /favicon.ico 200 in 6ms
+ GET /?restart=1757243365265 200 in 42ms
+ GET /favicon.ico 200 in 11ms
+ ✓ Compiled in 239ms (1377 modules)
+ GET /?restart=1757243365265 200 in 66ms
+ ✓ Compiled in 102ms (1377 modules)
+ GET /?restart=1757243365265 200 in 33ms
+ GET /?restart=1757243365265 200 in 109ms
+ ✓ Compiled /favicon.ico in 64ms (753 modules)
+ GET /favicon.ico 200 in 113ms
