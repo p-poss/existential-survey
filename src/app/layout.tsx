@@ -30,6 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" as="image" href="/shut_down.png" />
+      </head>
       <body className={msSans.variable}>
         <div
           id="bg-root"
