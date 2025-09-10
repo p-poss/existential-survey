@@ -450,6 +450,10 @@ export default function Home() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
+    
+    // Small delay to ensure cursor state is applied
+    await new Promise(resolve => setTimeout(resolve, 50))
+    
     const completionTime = Math.round((Date.now() - startTime) / 1000)
 
     try {
