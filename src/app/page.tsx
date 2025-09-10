@@ -937,7 +937,13 @@ export default function Home() {
                 <p style={{ margin: 0, fontSize: '11px', lineHeight: '14px', color: '#666' }}>
                   Version 0.1.0
                 </p>
-                <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px', color: '#666' }}>
+                <p 
+                  style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px', color: '#666', cursor: 'url(\'/cursor-pointer.png\') 6 2, pointer', textDecoration: 'underline' }}
+                  onClick={() => window.open('https://www.patrickposs.com/', '_blank')}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open('https://www.patrickposs.com/', '_blank'); } }}
+                >
                   Created by: Patrick Poss
                 </p>
                 <div style={{ 
