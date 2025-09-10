@@ -29,7 +29,7 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   // Video sources mapping
   const videoSources = {
     1: 'https://poss.b-cdn.net/13-video-1.mp4',
-    2: 'https://poss.b-cdn.net/puffco-peak-clear.mp4',
+    2: 'https://poss.b-cdn.net/13Q-2.mp4',
     3: 'https://poss.b-cdn.net/subambient-preview.mp4',
     4: 'https://poss.b-cdn.net/puffco-peak-intro-preview.mp4',
     5: 'https://poss.b-cdn.net/puffco-peak-clear-preview.mp4',
