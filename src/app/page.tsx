@@ -451,6 +451,11 @@ export default function Home() {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     
+    // Apply cursor change immediately
+    try {
+      document.body.classList.add('body-wait')
+    } catch {}
+    
     // Small delay to ensure cursor state is applied
     await new Promise(resolve => setTimeout(resolve, 50))
     
