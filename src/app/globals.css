@@ -224,6 +224,14 @@ input::placeholder, textarea::placeholder, select::placeholder {
   cursor: url('/cursor-wait.png') 0 0, wait !important;
 }
 
+/* Override browser loading cursor during fetch */
+.body-wait *:focus,
+.body-wait *:active,
+.body-wait button:focus,
+.body-wait button:active {
+  cursor: url('/cursor-wait.png') 0 0, wait !important;
+}
+
 /* Custom pointer cursor over Restart control */
 .restart-control,
 .restart-control * {
