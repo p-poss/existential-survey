@@ -938,7 +938,7 @@ export default function Home() {
                   Version 0.1.0
                 </p>
                 <p 
-                  style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px', color: '#666', cursor: 'url(\'/cursor-pointer.png\') 6 2, pointer', textDecoration: 'underline' }}
+                  style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px', color: '#666', cursor: 'url(\'/cursor-pointer.png\') 6 2, pointer' }}
                   onClick={() => window.open('https://www.patrickposs.com/', '_blank')}
                   role="button"
                   tabIndex={0}
