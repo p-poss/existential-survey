@@ -30,17 +30,17 @@ export default function ContentAreaVideo({ questionNumber }: ContentAreaVideoPro
   const videoSources = {
     1: 'https://poss.b-cdn.net/13-video-1.mp4',
     2: 'https://poss.b-cdn.net/13Q-2.mp4',
-    3: 'https://poss.b-cdn.net/subambient-preview.mp4',
-    4: 'https://poss.b-cdn.net/puffco-peak-intro-preview.mp4',
-    5: 'https://poss.b-cdn.net/puffco-peak-clear-preview.mp4',
-    6: 'https://poss.b-cdn.net/arktura-zund.mp4',
-    7: 'https://poss.b-cdn.net/vapor-install-preview.mp4',
-    8: 'https://poss.b-cdn.net/forest-foundry-preview.mp4',
-    9: 'https://poss.b-cdn.net/vapor-punch.mp4',
-    10: 'https://poss.b-cdn.net/courtside-hero.mp4',
-    11: 'https://poss.b-cdn.net/subambient-preview.mp4', // reuse Q3 source
-    12: 'https://poss.b-cdn.net/puffco-peak-clear-preview.mp4', // reuse Q5 source
-    13: 'https://poss.b-cdn.net/arktura-zund.mp4' // reuse Q6 source
+    3: 'https://poss.b-cdn.net/13-video-1.mp4',
+    4: 'https://poss.b-cdn.net/13-video-1.mp4',
+    5: 'https://poss.b-cdn.net/13-video-1.mp4',
+    6: 'https://poss.b-cdn.net/13-video-1.mp4',
+    7: 'https://poss.b-cdn.net/13-video-1.mp4',
+    8: 'https://poss.b-cdn.net/13-video-1.mp4',
+    9: 'https://poss.b-cdn.net/13-video-1.mp4',
+    10: 'https://poss.b-cdn.net/13-video-1.mp4',
+    11: 'https://poss.b-cdn.net/13-video-1.mp4',
+    12: 'https://poss.b-cdn.net/13-video-1.mp4',
+    13: 'https://poss.b-cdn.net/13-video-1.mp4'
   }
 
   // Calculate adaptive video range
