@@ -720,11 +720,6 @@ export default function Home() {
                 <div className="window-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflowY: 'auto' }}>
           {/* Content container */}
           <div className="w-full flex flex-col flex-1 relative">
-                {isCelebrating && (
-              <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
-                <Image src="/party2.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
-              </div>
-            )}
             {/* Chunk 1: Video area with number and noise (hidden on completion) */}
             {isComplete ? (
                   <div className="h-[200px]" />
@@ -755,6 +750,17 @@ export default function Home() {
                 <div className="pt-3 px-3">
               {isComplete ? (
                 <div>
+                  {/* Celebration GIF positioned above the text with fixed positioning */}
+                  {isCelebrating && (
+                    <div className="fixed z-20 pointer-events-none flex items-center justify-center" style={{
+                      top: '100px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: '100vw'
+                    }}>
+                      <Image src="/party2.gif" alt="" width={140} height={140} className="opacity-90" />
+                    </div>
+                  )}
                   <h2
                     className="text-center mb-4"
                     style={{
@@ -797,12 +803,6 @@ export default function Home() {
             {/* Chunk 3: Interactive elements (hidden when complete) */}
             {!isComplete && (
                   <div className="pt-2 pb-3 px-3 flex-1 flex flex-col min-h-0 relative">
-                {/* Celebration overlay GIF */}
-                {isCelebrating && (
-                  <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-                    <Image src="/party2.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
-                  </div>
-                )}
                 <InteractiveElements 
                   currentQuestion={currentQuestion}
                   formData={formData}
