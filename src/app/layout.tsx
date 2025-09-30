@@ -6,6 +6,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Anonymous Survey", 
   description: "A design research experiment exploring anonymous existential thoughts",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/favicon.png',
+  },
 };
 
 export const viewport: Viewport = {
