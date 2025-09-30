@@ -722,7 +722,7 @@ export default function Home() {
           <div className="w-full flex flex-col flex-1 relative">
                 {isCelebrating && (
               <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
-                <Image src="/party.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
+                <Image src="/party2.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
               </div>
             )}
             {/* Chunk 1: Video area with number and noise (hidden on completion) */}
@@ -800,7 +800,7 @@ export default function Home() {
                 {/* Celebration overlay GIF */}
                 {isCelebrating && (
                   <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-                    <Image src="/party.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
+                    <Image src="/party2.gif" alt="" width={800} height={800} className="max-w-[70%] max-h-[70%] opacity-90" />
                   </div>
                 )}
                 <InteractiveElements 
@@ -991,28 +991,87 @@ export default function Home() {
           boxShadow: 'inset 0 1px 0 #FFFFFF, inset 0 -1px 0 #808080, inset 1px 0 0 #FFFFFF, inset -1px 0 0 #808080'
         }}
       >
-        <button
-          type="button"
-          className="default"
-          onPointerDown={playSubmitClick}
-          onClick={() => setShowAboutMenu(!showAboutMenu)}
-          style={{
-            minWidth: 80,
-            margin: 0,
-            paddingLeft: 8,
-            paddingRight: 8,
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 2, height: '100%' }}>
-            <Image src="/info.png" alt="" width={14} height={14} priority />
-            <span style={{ fontWeight: 700 }}>About</span>
-          </span>
-        </button>
+        <div style={{ position: 'relative' }}>
+          <button
+            type="button"
+            className="default"
+            onPointerDown={playSubmitClick}
+            onClick={() => setShowAboutMenu(!showAboutMenu)}
+            style={{
+              minWidth: 80,
+              margin: 0,
+              paddingLeft: 8,
+              paddingRight: 8,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 2, height: '100%' }}>
+              <Image src="/info.png" alt="" width={14} height={14} priority />
+              <span style={{ fontWeight: 700 }}>About</span>
+            </span>
+          </button>
+          {/* Vertical lines 3 pixels to the right of the About button */}
+          <div style={{
+            position: 'absolute',
+            left: '100%', // Start at the right edge of the button
+            top: '0px', // Added 1px back to top
+            bottom: '0px', // Added 1px back to bottom
+            marginLeft: '3px', // 3px to the right of the button edge
+            width: '2px',
+            zIndex: 1
+          }}>
+            {/* Gray line (left) */}
+            <div style={{
+              position: 'absolute',
+              left: '0px',
+              top: '0px',
+              bottom: '0px',
+              width: '1px',
+              backgroundColor: '#808080'
+            }} />
+            {/* White line (right) */}
+            <div style={{
+              position: 'absolute',
+              left: '1px',
+              top: '0px',
+              bottom: '0px',
+              width: '1px',
+              backgroundColor: '#FFFFFF'
+            }} />
+          </div>
+        </div>
         <div style={{ flex: 1 }} />
-        <div className="status-bar" aria-hidden style={{ margin: 0 }}>
+        <div className="status-bar" aria-hidden style={{ margin: 0, position: 'relative' }}>
+          {/* Vertical lines 3 pixels to the left of the time box */}
+          <div style={{
+            position: 'absolute',
+            left: '-5px', // 3px to the left of the box edge (which starts at -2px due to padding)
+            top: '0px', // Added 1px back to top
+            bottom: '0px', // Added 1px back to bottom
+            width: '2px',
+            zIndex: 1
+          }}>
+            {/* Gray line (left) */}
+            <div style={{
+              position: 'absolute',
+              left: '0px',
+              top: '0px',
+              bottom: '0px',
+              width: '1px',
+              backgroundColor: '#808080'
+            }} />
+            {/* White line (right) */}
+            <div style={{
+              position: 'absolute',
+              left: '1px',
+              top: '0px',
+              bottom: '0px',
+              width: '1px',
+              backgroundColor: '#FFFFFF'
+            }} />
+          </div>
           <p className="status-bar-field" style={{ padding: '2px 4px', textAlign: 'center', margin: 0, color: '#000' }}>{clock}</p>
         </div>
       </div>
