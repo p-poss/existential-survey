@@ -1030,7 +1030,7 @@ export default function Home() {
         <div style={{ position: 'relative' }}>
           <button
             type="button"
-            className={showAboutMenu ? "default pressed" : "default"}
+            className="default"
             onPointerDown={playSubmitClick}
             onClick={() => setShowAboutMenu(!showAboutMenu)}
             style={{
@@ -1040,7 +1040,13 @@ export default function Home() {
               paddingRight: 8,
               display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              // Pressed state styling
+              ...(showAboutMenu && {
+                boxShadow: 'inset 1px 1px 0px #808080, inset -1px -1px 0px #FFFFFF',
+                border: '1px solid #808080',
+                background: '#c0c0c0'
+              })
             }}
           >
             <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 2, height: '100%' }}>
