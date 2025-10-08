@@ -154,6 +154,7 @@ export default function Home() {
   const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const iconRef = useRef<HTMLDivElement | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
+  const aboutMenuRef = useRef<HTMLDivElement | null>(null)
   const musicRef = useRef<{
     intervalId?: number
     strobeId?: number
@@ -222,6 +223,20 @@ export default function Home() {
     const id = window.setInterval(update, 30_000)
     return () => window.clearInterval(id)
   }, [])
+
+  // Click outside About menu to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showAboutMenu && aboutMenuRef.current && !aboutMenuRef.current.contains(event.target as Node)) {
+        setShowAboutMenu(false)
+      }
+    }
+
+    if (showAboutMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showAboutMenu])
 
   const playClick = () => {
     const ctx = ensureCtx()
@@ -899,6 +914,7 @@ export default function Home() {
       {/* About Menu */}
       {showAboutMenu && (
         <div
+          ref={aboutMenuRef}
           style={{
             position: 'fixed',
             left: 3,
