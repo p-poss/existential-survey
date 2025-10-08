@@ -611,7 +611,7 @@ export default function Home() {
                     </div>
                     <div className="field-row" style={{ alignItems: 'center', gap: 8, marginTop: 8 }}>
                       <label htmlFor="login-pass" style={{ minWidth: 80 }}><u>A</u>ge:</label>
-                      <input id="login-pass" type="password" value={loginAge} onChange={(e) => setLoginAge(e.target.value)} onFocus={playInputFocus} />
+                      <input id="login-pass" type="password" value={loginAge} onChange={(e) => setLoginAge(e.target.value)} onFocus={playInputFocus} autoComplete="off" />
                     </div>
                   </div>
                 </div>
