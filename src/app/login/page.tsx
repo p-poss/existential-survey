@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function LoginPage() {
   return (
     <div style={{
@@ -45,7 +47,7 @@ export default function LoginPage() {
           Login
         </button>
       </form>
-      <p><a href="/" style={{ color: 'blue' }}>Back to Survey</a></p>
+      <p><Link href="/" style={{ color: 'blue' }}>Back to Survey</Link></p>
     </div>
   )
 }
