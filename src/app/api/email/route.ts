@@ -70,19 +70,12 @@ export async function POST(request: NextRequest) {
       }
       emailContent += '<br>'
     }
-    
-    // Debug: Add raw form data for troubleshooting
-    emailContent += '<hr><p><em>Debug Info:</em></p>'
-    emailContent += `<p>Raw login_age: ${JSON.stringify((rawBody.formData as any)?.login_age)}</p>`
-    emailContent += `<p>Raw login_location: ${JSON.stringify((rawBody.formData as any)?.login_location)}</p>`
-    emailContent += `<p>Validated login_age: ${JSON.stringify(formData.login_age)}</p>`
-    emailContent += `<p>Validated login_location: ${JSON.stringify(formData.login_location)}</p>`
 
     emailContent += '<p><em>Thank you for completing the survey!</em></p>'
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'onboarding@resend.dev', // Default to Resend's verified domain
+      from: process.env.FROM_EMAIL || 'onboarding@resend.dev',
       to: [email],
       subject: 'Your Survey Answers - 13 Questions To Contemplate Before We Die',
       html: emailContent,
