@@ -919,7 +919,7 @@ export default function Home() {
             position: 'fixed',
             left: 3,
             bottom: 32, // Position above the taskbar (taskbar height is 32px)
-            zIndex: 2,
+            zIndex: 6,
             minWidth: 200
           }}
         >
