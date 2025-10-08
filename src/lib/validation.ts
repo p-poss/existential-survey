@@ -32,10 +32,6 @@ const VALIDATION_LIMITS = {
   TEXT_QUESTION: 500,      // Survey text questions
   LOCATION: 100,           // Location field
   EMAIL: 100,              // Email field
-  LOGIN_AGE_MIN: 13,       // Minimum age for initial login (more inclusive)
-  LOGIN_AGE_MAX: 118,      // Maximum age for initial login
-  SURVEY_AGE_MIN: 18,      // Minimum age for survey question 9
-  SURVEY_AGE_MAX: 118,     // Maximum age for survey question 9
   COMPLETION_TIME_MIN: 0,  // Minimum completion time (seconds)
   COMPLETION_TIME_MAX: 3600, // Maximum completion time (1 hour)
 } as const;
@@ -77,7 +73,7 @@ export function validateAge(input: unknown, isLoginAge: boolean = false): number
 
   const num = Number(input);
   
-  // Check if it's a valid number and within reasonable range
+  // Check if it's a valid number
   if (isNaN(num) || !isFinite(num)) {
     return null;
   }
@@ -85,15 +81,18 @@ export function validateAge(input: unknown, isLoginAge: boolean = false): number
   // Round to nearest integer
   const age = Math.round(num);
   
-  // Check age bounds based on context
-  const minAge = isLoginAge ? VALIDATION_LIMITS.LOGIN_AGE_MIN : VALIDATION_LIMITS.SURVEY_AGE_MIN;
-  const maxAge = isLoginAge ? VALIDATION_LIMITS.LOGIN_AGE_MAX : VALIDATION_LIMITS.SURVEY_AGE_MAX;
-  
-  if (age >= minAge && age <= maxAge) {
+  if (isLoginAge) {
+    // No restrictions for login age - accept any reasonable number
+    // Just ensure it's not negative or extremely large
+    if (age >= 0 && age <= 999) {
+      return age;
+    }
+    return null;
+  } else {
+    // For survey question 9, accept any age since frontend slider controls the range
+    // The frontend slider is min=18, max=118, so we trust that
     return age;
   }
-  
-  return null;
 }
 
 /**
