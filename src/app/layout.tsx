@@ -8,10 +8,9 @@ export const metadata: Metadata = {
   description: "A design research experiment exploring anonymous existential thoughts",
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
       { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: '/favicon.png',
     apple: '/favicon.png',
   },
 };
