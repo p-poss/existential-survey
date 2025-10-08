@@ -961,7 +961,7 @@ export default function Home() {
                   <strong>&quot;13 Questions To Contemplate Before We Die&quot;</strong>
                 </p>
                 <p style={{ margin: '0 0 0 0', fontSize: '11px', lineHeight: '14px' }}>
-                  A quiet moment to consider your finite time and infinite questions.
+                  Take a moment to consider your finite time and infinite questions.
                 </p>
                 <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
                   Built with Next.js, <span 
