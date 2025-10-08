@@ -36,6 +36,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: https:", // Allow images from any HTTPS source
               "font-src 'self'",
               "connect-src 'self' https://zttbaeecujkyxkxkifqy.supabase.co https://api.resend.com", // Supabase and Resend APIs
+              "media-src 'self' https://poss.b-cdn.net", // Allow videos from your CDN
               "object-src 'none'", // Block plugins
               "frame-src 'none'", // Block iframes
               "base-uri 'self'", // Restrict base tag
