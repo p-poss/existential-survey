@@ -40,7 +40,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   {
     id: 7,
     type: 'text',
-    question: 'If you died today, what experience would you most regret missing out on?'
+    question: 'If you died today, what unlived experience would haunt you most?'
   },
   {
     id: 8,
