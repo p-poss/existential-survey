@@ -960,7 +960,7 @@ export default function Home() {
                   </div>
                   <div style={{ alignItems: 'center', gap: 4, marginBottom: 2, display: 'flex', marginLeft: '19px', paddingLeft: 0 }}>
                     <input type="checkbox" id="about-step-3" style={{ margin: 0, padding: 0 }} />
-                    <label htmlFor="about-step-3" style={{ margin: 0, fontSize: '11px', lineHeight: '14px' }}>Return yearly to trace how you've changed</label>
+                    <label htmlFor="about-step-3" style={{ margin: 0, fontSize: '11px', lineHeight: '14px' }}>Return yearly to trace how you&apos;ve changed</label>
                   </div>
                 </div>
                 <p style={{ margin: '24px 0 0 0', fontSize: '11px', lineHeight: '14px', color: '#666' }}>
