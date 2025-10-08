@@ -32,8 +32,10 @@ const VALIDATION_LIMITS = {
   TEXT_QUESTION: 500,      // Survey text questions
   LOCATION: 100,           // Location field
   EMAIL: 100,              // Email field
-  AGE_MIN: 13,             // Minimum age (more inclusive)
-  AGE_MAX: 118,            // Maximum age
+  LOGIN_AGE_MIN: 13,       // Minimum age for initial login (more inclusive)
+  LOGIN_AGE_MAX: 118,      // Maximum age for initial login
+  SURVEY_AGE_MIN: 18,      // Minimum age for survey question 9
+  SURVEY_AGE_MAX: 118,     // Maximum age for survey question 9
   COMPLETION_TIME_MIN: 0,  // Minimum completion time (seconds)
   COMPLETION_TIME_MAX: 3600, // Maximum completion time (1 hour)
 } as const;
@@ -68,7 +70,7 @@ export function sanitizeText(input: unknown, maxLength: number = VALIDATION_LIMI
 /**
  * Validates and sanitizes age input
  */
-export function validateAge(input: unknown): number | null {
+export function validateAge(input: unknown, isLoginAge: boolean = false): number | null {
   if (input === null || input === undefined || input === '') {
     return null;
   }
@@ -83,8 +85,11 @@ export function validateAge(input: unknown): number | null {
   // Round to nearest integer
   const age = Math.round(num);
   
-  // Check age bounds
-  if (age >= VALIDATION_LIMITS.AGE_MIN && age <= VALIDATION_LIMITS.AGE_MAX) {
+  // Check age bounds based on context
+  const minAge = isLoginAge ? VALIDATION_LIMITS.LOGIN_AGE_MIN : VALIDATION_LIMITS.SURVEY_AGE_MIN;
+  const maxAge = isLoginAge ? VALIDATION_LIMITS.LOGIN_AGE_MAX : VALIDATION_LIMITS.SURVEY_AGE_MAX;
+  
+  if (age >= minAge && age <= maxAge) {
     return age;
   }
   
@@ -202,7 +207,9 @@ export function validateSurveySubmission(rawData: RawSurveyData): ValidatedSurve
   validated.q6 = sanitizeText(rawData.q6);
   validated.q7 = sanitizeText(rawData.q7);
   validated.q8 = sanitizeText(rawData.q8);
-  validated.q9 = sanitizeText(rawData.q9);
+  // Special handling for question 9 (age slider) - validate as age
+  const q9Age = validateAge(rawData.q9, false); // false = survey age (18-118)
+  validated.q9 = q9Age ? q9Age.toString() : '';
   validated.q10 = sanitizeText(rawData.q10);
   validated.q11 = sanitizeText(rawData.q11);
   validated.q12 = sanitizeText(rawData.q12);
@@ -215,7 +222,7 @@ export function validateSurveySubmission(rawData: RawSurveyData): ValidatedSurve
 
   // Validate metadata
   validated.completion_time = validateCompletionTime(rawData.completion_time);
-  validated.login_age = validateAge(rawData.login_age);
+  validated.login_age = validateAge(rawData.login_age, true); // true = login age (13-118)
   validated.login_location = validateLocation(rawData.login_location);
 
   return validated;
