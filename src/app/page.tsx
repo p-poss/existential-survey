@@ -938,10 +938,17 @@ export default function Home() {
                   <strong>&quot;13 Questions To Contemplate Before We Die&quot;</strong>
                 </p>
                 <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
-                  A design research experiment exploring anonymous existential thoughts.
+                  A design research experiment exploring anonymous existential thoughts.<br />
+                  Double tap the question mark to begin.
                 </p>
                 <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
-                  Built with Next.js, 98.css, and Framer Motion.
+                  Built with Next.js, <span 
+                    style={{ cursor: 'url(\'/cursor-pointer.png\') 6 2, pointer' }}
+                    onClick={() => window.open('https://jdan.github.io/98.css/#intro', '_blank')}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open('https://jdan.github.io/98.css/#intro', '_blank'); } }}
+                  >98.css</span>, and Framer Motion.
                 </p>
                 <p style={{ margin: 0, fontSize: '11px', lineHeight: '14px', color: '#666' }}>
                   Version 0.1.0
