@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { validateEmailSubmission } from '@/lib/validation'
 
 // Initialize Resend only if API key is available
 const getResend = () => {
@@ -20,12 +21,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json()
-    const { email, formData } = body
+    const rawBody = await request.json()
+    
+    // Validate and sanitize email and form data
+    const { email, formData } = validateEmailSubmission(rawBody)
 
     if (!email || !formData) {
       return NextResponse.json(
-        { error: 'Email and form data are required' },
+        { error: 'Valid email and form data are required' },
         { status: 400 }
       )
     }
@@ -37,8 +40,8 @@ export async function POST(request: NextRequest) {
     let emailContent = '<h2>Your Survey Answers</h2><br>'
     
     surveyQuestions.forEach((question) => {
-      const answerKey = `q${question.id}`
-      const optionKey = `${answerKey}_option`
+      const answerKey = `q${question.id}` as keyof typeof formData
+      const optionKey = `${answerKey}_option` as keyof typeof formData
       const answer = formData[answerKey] || 'No answer provided'
       const option = formData[optionKey] || ''
       
@@ -52,7 +55,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Add completion time if available
-    if (formData.completion_time) {
+    if (formData.completion_time && formData.completion_time > 0) {
       emailContent += `<p><strong>Completion Time:</strong> ${formData.completion_time} seconds</p><br>`
     }
 

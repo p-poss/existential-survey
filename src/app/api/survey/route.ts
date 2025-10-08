@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { validateSurveySubmission, hasMinimumData } from '@/lib/validation'
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,31 +12,39 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
     
-    // No validation - allow optional answers
-    // Users can skip questions if they want
+    // Validate and sanitize all input data
+    const validatedData = validateSurveySubmission(rawBody)
+    
+    // Check if submission has minimum meaningful content
+    if (!hasMinimumData(validatedData)) {
+      return NextResponse.json(
+        { error: 'Please provide at least one answer' },
+        { status: 400 }
+      )
+    }
 
-    // Prepare data for insertion
+    // Prepare data for insertion (already validated and sanitized)
     const surveyData = {
-      q1: body.q1 ? body.q1.trim() : "",
-      q2: body.q2 ? body.q2.trim() : "",
-      q3: body.q3 ? body.q3.trim() : "",
-      q4: body.q4 ? body.q4.trim() : "",
-      q5: body.q5 ? body.q5.trim() : "",
-      q6: body.q6 ? body.q6.trim() : "",
-      q7: body.q7 ? body.q7.trim() : "",
-      q8: body.q8 ? body.q8.trim() : "",
-      q9: body.q9 ? body.q9.trim() : "",
-      q10: body.q10 ? body.q10.trim() : "",
-      q11: body.q11 ? body.q11.trim() : "",
-      q12: body.q12 ? body.q12.trim() : "",
-      q13: body.q13 ? body.q13.trim() : "",
-      q1_option: body.q1_option || null,
-      completion_time: body.completion_time || null,
-      // Login window metadata (optional)
-      login_age: body.login_age ?? null,
-      login_location: body.login_location ? String(body.login_location).trim() : null
+      q1: validatedData.q1,
+      q2: validatedData.q2,
+      q3: validatedData.q3,
+      q4: validatedData.q4,
+      q5: validatedData.q5,
+      q6: validatedData.q6,
+      q7: validatedData.q7,
+      q8: validatedData.q8,
+      q9: validatedData.q9,
+      q10: validatedData.q10,
+      q11: validatedData.q11,
+      q12: validatedData.q12,
+      q13: validatedData.q13,
+      q1_option: validatedData.q1_option || null,
+      completion_time: validatedData.completion_time,
+      // Login window metadata (validated)
+      login_age: validatedData.login_age,
+      login_location: validatedData.login_location
     }
 
     // Insert into Supabase
