@@ -853,7 +853,7 @@ export default function Home() {
               >
                 {emailStatus === 'sending' ? 'Sending...' : 
                  emailStatus === 'success' ? 'Email Success' : 
-                 emailStatus === 'error' ? 'Retry Email' : 
+                 emailStatus === 'error' ? 'Error Retry' : 
                  'Email Answers'}
               </button>
             </div>
