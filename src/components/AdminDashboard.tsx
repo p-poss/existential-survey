@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Download, Eye, EyeOff } from 'lucide-react'
+import { Download, Eye, EyeOff, LogOut } from 'lucide-react'
 import type { SurveyResponse } from '@/lib/types'
 
 export default function AdminDashboard() {
@@ -10,6 +10,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [showResponses, setShowResponses] = useState(false)
   const [error, setError] = useState('')
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   useEffect(() => {
     fetchResponses()
@@ -17,15 +18,18 @@ export default function AdminDashboard() {
 
   const fetchResponses = async () => {
     try {
-      const response = await fetch('/api/survey')
+      const response = await fetch('/api/survey', {
+        credentials: 'include' // Include cookies for authentication
+      })
       if (response.ok) {
         const data = await response.json()
         setResponses(data.responses || [])
       } else {
-        setError('Failed to fetch responses')
+        const errorData = await response.json().catch(() => ({}))
+        setError(`Failed to fetch responses: ${errorData.error || 'Unknown error'}`)
       }
-    } catch {
-      setError('Error fetching responses')
+    } catch (error) {
+      setError(`Error fetching responses: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -35,7 +39,7 @@ export default function AdminDashboard() {
     const headers = [
       'ID', 'Timestamp',
       'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13',
-      'Q1 Option', 'Completion Time (seconds)'
+      'Q1 Option', 'Completion Time (seconds)', 'Age', 'Location'
     ]
 
     const escape = (s: string) => `"${s.replace(/"/g, '""')}"`
@@ -59,7 +63,9 @@ export default function AdminDashboard() {
         escape(r.q12 || ''),
         escape(r.q13 || ''),
         r.q1_option ? escape(r.q1_option) : '',
-        r.completion_time ?? ''
+        r.completion_time ?? '',
+        r.login_age ?? '',
+        r.login_location ? escape(r.login_location) : ''
       ].join(','))
     ].join('\n')
 
@@ -70,6 +76,29 @@ export default function AdminDashboard() {
     a.download = `survey_responses_${new Date().toISOString().split('T')[0]}.csv`
     a.click()
     window.URL.revokeObjectURL(url)
+  }
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include' // Include cookies for authentication
+      })
+      
+      if (response.ok) {
+        // Redirect to login page
+        window.location.href = '/login'
+      } else {
+        console.error('Logout failed')
+        // Still redirect to login page
+        window.location.href = '/login'
+      }
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Still redirect to login page
+      window.location.href = '/login'
+    }
   }
 
   if (loading) {
@@ -103,6 +132,14 @@ export default function AdminDashboard() {
             >
               {showResponses ? <EyeOff size={20} /> : <Eye size={20} />}
               <span>{showResponses ? 'Hide' : 'Show'} Responses</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              <LogOut size={20} />
+              <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
             </button>
             <button
               onClick={exportToCSV}
@@ -155,7 +192,7 @@ export default function AdminDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
+            className="space-y-4 max-h-96 overflow-y-auto border border-gray-200 rounded-lg p-4"
           >
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">All Responses</h2>
             {responses.map((response, index) => (
@@ -167,9 +204,15 @@ export default function AdminDashboard() {
                 className="bg-gray-50 p-4 rounded-lg border"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <span className="text-sm text-gray-500">
-                    Response #{index + 1} - {new Date(response.created_at).toLocaleString()}
-                  </span>
+                  <div className="text-sm text-gray-500">
+                    <div>Response #{index + 1} - {new Date(response.created_at).toLocaleString()}</div>
+                    {(response.login_age || response.login_location) && (
+                      <div className="mt-1">
+                        {response.login_age && <span className="mr-4">Age: {response.login_age}</span>}
+                        {response.login_location && <span>Location: {response.login_location}</span>}
+                      </div>
+                    )}
+                  </div>
                   {response.completion_time && (
                     <span className="text-sm text-gray-500">
                       {response.completion_time}s

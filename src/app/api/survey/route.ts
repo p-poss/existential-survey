@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { validateSurveySubmission, hasMinimumData } from '@/lib/validation'
+import { isAuthenticated } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
@@ -77,12 +78,21 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    // Check if Supabase is configured
-    if (!supabase) {
+    // Check authentication for admin access
+    const authenticated = await isAuthenticated()
+    if (!authenticated) {
       return NextResponse.json(
-        { error: 'Database not configured. Please set up Supabase environment variables.' },
-        { status: 500 }
+        { error: 'Unauthorized' },
+        { status: 401 }
       )
+    }
+
+    // Gracefully handle missing Supabase configuration
+    if (!supabase) {
+      return NextResponse.json({
+        responses: [],
+        note: 'Supabase not configured; no data available'
+      })
     }
 
     // Get all survey responses (for admin dashboard)
@@ -99,7 +109,7 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ responses: data })
+    return NextResponse.json({ responses: data || [] })
 
   } catch (error) {
     console.error('API error:', error)
