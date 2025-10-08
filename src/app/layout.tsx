@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Anonymous Survey", 
-  description: "A design research experiment exploring anonymous existential thoughts",
+  description: "A design research experiment exploring anonymous existential thoughts. Double tap the question mark to begin.",
   icons: {
     icon: [
       { url: '/favicon.png', sizes: '32x32', type: 'image/png' },

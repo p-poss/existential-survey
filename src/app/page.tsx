@@ -937,9 +937,8 @@ export default function Home() {
                 <p style={{ margin: '0 0 8px 0', fontSize: '12px' }}>
                   <strong>&quot;13 Questions To Contemplate Before We Die&quot;</strong>
                 </p>
-                <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
-                  A design research experiment exploring anonymous existential thoughts.<br />
-                  Double tap the question mark to begin.
+                <p style={{ margin: '0 0 0 0', fontSize: '11px', lineHeight: '14px' }}>
+                  A quiet moment to consider your finite time and infinite questions.
                 </p>
                 <p style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
                   Built with Next.js, <span 
@@ -948,9 +947,23 @@ export default function Home() {
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open('https://jdan.github.io/98.css/#intro', '_blank'); } }}
-                  >98.css</span>, and Framer Motion.
+                  >98.css</span>, and Framer Motion
                 </p>
-                <p style={{ margin: 0, fontSize: '11px', lineHeight: '14px', color: '#666' }}>
+                <div style={{ margin: '0 0 8px 0', fontSize: '11px', lineHeight: '14px' }}>
+                  <div style={{ alignItems: 'center', gap: 4, marginBottom: 2, display: 'flex', marginLeft: '19px', paddingLeft: 0 }}>
+                    <input type="checkbox" id="about-step-1" style={{ margin: 0, padding: 0 }} />
+                    <label htmlFor="about-step-1" style={{ margin: 0, fontSize: '11px', lineHeight: '14px' }}>Double-tap the question mark to begin</label>
+                  </div>
+                  <div style={{ alignItems: 'center', gap: 4, marginBottom: 2, display: 'flex', marginLeft: '19px', paddingLeft: 0 }}>
+                    <input type="checkbox" id="about-step-2" style={{ margin: 0, padding: 0 }} />
+                    <label htmlFor="about-step-2" style={{ margin: 0, fontSize: '11px', lineHeight: '14px' }}>Send answers to yourself</label>
+                  </div>
+                  <div style={{ alignItems: 'center', gap: 4, marginBottom: 2, display: 'flex', marginLeft: '19px', paddingLeft: 0 }}>
+                    <input type="checkbox" id="about-step-3" style={{ margin: 0, padding: 0 }} />
+                    <label htmlFor="about-step-3" style={{ margin: 0, fontSize: '11px', lineHeight: '14px' }}>Return yearly to trace how you've changed</label>
+                  </div>
+                </div>
+                <p style={{ margin: '24px 0 0 0', fontSize: '11px', lineHeight: '14px', color: '#666' }}>
                   Version 0.1.0
                 </p>
                 <p 
