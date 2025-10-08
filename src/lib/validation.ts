@@ -3,6 +3,30 @@
  * Provides invisible protection against malicious inputs
  */
 
+// Type for raw input data (what we receive from the client)
+interface RawSurveyData {
+  [key: string]: unknown;
+  q1?: unknown;
+  q2?: unknown;
+  q3?: unknown;
+  q4?: unknown;
+  q5?: unknown;
+  q6?: unknown;
+  q7?: unknown;
+  q8?: unknown;
+  q9?: unknown;
+  q10?: unknown;
+  q11?: unknown;
+  q12?: unknown;
+  q13?: unknown;
+  q1_option?: unknown;
+  completion_time?: unknown;
+  login_age?: unknown;
+  login_location?: unknown;
+  email?: unknown;
+  formData?: unknown;
+}
+
 // Maximum lengths for different field types
 const VALIDATION_LIMITS = {
   TEXT_QUESTION: 500,      // Survey text questions
@@ -18,7 +42,7 @@ const VALIDATION_LIMITS = {
  * Sanitizes text input by removing dangerous HTML/JavaScript
  * and limiting length
  */
-export function sanitizeText(input: any, maxLength: number = VALIDATION_LIMITS.TEXT_QUESTION): string {
+export function sanitizeText(input: unknown, maxLength: number = VALIDATION_LIMITS.TEXT_QUESTION): string {
   if (typeof input !== 'string') {
     return '';
   }
@@ -44,7 +68,7 @@ export function sanitizeText(input: any, maxLength: number = VALIDATION_LIMITS.T
 /**
  * Validates and sanitizes age input
  */
-export function validateAge(input: any): number | null {
+export function validateAge(input: unknown): number | null {
   if (input === null || input === undefined || input === '') {
     return null;
   }
@@ -70,7 +94,7 @@ export function validateAge(input: any): number | null {
 /**
  * Validates and sanitizes completion time
  */
-export function validateCompletionTime(input: any): number {
+export function validateCompletionTime(input: unknown): number {
   if (input === null || input === undefined || input === '') {
     return 0;
   }
@@ -93,7 +117,7 @@ export function validateCompletionTime(input: any): number {
 /**
  * Validates and sanitizes location input
  */
-export function validateLocation(input: any): string | null {
+export function validateLocation(input: unknown): string | null {
   if (!input) {
     return null;
   }
@@ -105,7 +129,7 @@ export function validateLocation(input: any): string | null {
 /**
  * Validates and sanitizes email input
  */
-export function validateEmail(input: any): string | null {
+export function validateEmail(input: unknown): string | null {
   if (!input || typeof input !== 'string') {
     return null;
   }
@@ -148,7 +172,7 @@ export interface ValidatedSurveyData {
 /**
  * Validates and sanitizes entire survey submission
  */
-export function validateSurveySubmission(rawData: any): ValidatedSurveyData {
+export function validateSurveySubmission(rawData: RawSurveyData): ValidatedSurveyData {
   // Initialize with empty values
   const validated: ValidatedSurveyData = {
     q1: '',
@@ -170,10 +194,19 @@ export function validateSurveySubmission(rawData: any): ValidatedSurveyData {
   };
 
   // Validate each question (q1-q13)
-  for (let i = 1; i <= 13; i++) {
-    const fieldName = `q${i}` as keyof ValidatedSurveyData;
-    (validated as any)[fieldName] = sanitizeText(rawData[fieldName]);
-  }
+  validated.q1 = sanitizeText(rawData.q1);
+  validated.q2 = sanitizeText(rawData.q2);
+  validated.q3 = sanitizeText(rawData.q3);
+  validated.q4 = sanitizeText(rawData.q4);
+  validated.q5 = sanitizeText(rawData.q5);
+  validated.q6 = sanitizeText(rawData.q6);
+  validated.q7 = sanitizeText(rawData.q7);
+  validated.q8 = sanitizeText(rawData.q8);
+  validated.q9 = sanitizeText(rawData.q9);
+  validated.q10 = sanitizeText(rawData.q10);
+  validated.q11 = sanitizeText(rawData.q11);
+  validated.q12 = sanitizeText(rawData.q12);
+  validated.q13 = sanitizeText(rawData.q13);
 
   // Validate Q1 option (write-in text)
   if (rawData.q1_option) {
@@ -191,9 +224,9 @@ export function validateSurveySubmission(rawData: any): ValidatedSurveyData {
 /**
  * Validates email submission data
  */
-export function validateEmailSubmission(rawData: any): { email: string | null; formData: ValidatedSurveyData } {
+export function validateEmailSubmission(rawData: RawSurveyData): { email: string | null; formData: ValidatedSurveyData } {
   const email = validateEmail(rawData.email);
-  const formData = validateSurveySubmission(rawData.formData || {});
+  const formData = validateSurveySubmission((rawData.formData as RawSurveyData) || {});
 
   return { email, formData };
 }
