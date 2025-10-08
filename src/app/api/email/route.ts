@@ -70,6 +70,13 @@ export async function POST(request: NextRequest) {
       }
       emailContent += '<br>'
     }
+    
+    // Debug: Add raw form data for troubleshooting
+    emailContent += '<hr><p><em>Debug Info:</em></p>'
+    emailContent += `<p>Raw login_age: ${JSON.stringify((rawBody.formData as any)?.login_age)}</p>`
+    emailContent += `<p>Raw login_location: ${JSON.stringify((rawBody.formData as any)?.login_location)}</p>`
+    emailContent += `<p>Validated login_age: ${JSON.stringify(formData.login_age)}</p>`
+    emailContent += `<p>Validated login_location: ${JSON.stringify(formData.login_location)}</p>`
 
     emailContent += '<p><em>Thank you for completing the survey!</em></p>'
 

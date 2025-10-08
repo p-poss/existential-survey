@@ -32,7 +32,7 @@ const VALIDATION_LIMITS = {
   TEXT_QUESTION: 500,      // Survey text questions
   LOCATION: 100,           // Location field
   EMAIL: 100,              // Email field
-  AGE_MIN: 18,             // Minimum age
+  AGE_MIN: 13,             // Minimum age (more inclusive)
   AGE_MAX: 118,            // Maximum age
   COMPLETION_TIME_MIN: 0,  // Minimum completion time (seconds)
   COMPLETION_TIME_MAX: 3600, // Maximum completion time (1 hour)
