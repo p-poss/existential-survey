@@ -6,9 +6,9 @@ export const surveyQuestions: SurveyQuestion[] = [
     type: 'multiple_choice',
     question: 'Is this life:',
     options: [
-      'A test',
       "God's plan",
-      'A simulation',
+      'A simulation or illusion',
+      'What you make of it',
       'Something else (write in)'
     ]
   },
