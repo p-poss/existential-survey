@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preload" as="image" href="/shut_down.png" />
+        <link rel="preload" as="image" href="/shut_down.png" fetchPriority="low" />
       </head>
       <body className={msSans.variable}>
         <div
