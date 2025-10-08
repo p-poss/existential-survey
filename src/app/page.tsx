@@ -233,8 +233,15 @@ export default function Home() {
     }
 
     if (showAboutMenu) {
-      document.addEventListener('mousedown', handleClickOutside)
-      return () => document.removeEventListener('mousedown', handleClickOutside)
+      // Use a slight delay to ensure button clicks are processed first
+      const timeoutId = setTimeout(() => {
+        document.addEventListener('click', handleClickOutside)
+      }, 0)
+      
+      return () => {
+        clearTimeout(timeoutId)
+        document.removeEventListener('click', handleClickOutside)
+      }
     }
   }, [showAboutMenu])
 
