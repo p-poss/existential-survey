@@ -1030,7 +1030,7 @@ export default function Home() {
         <div style={{ position: 'relative' }}>
           <button
             type="button"
-            className="default"
+            className={showAboutMenu ? "default pressed" : "default"}
             onPointerDown={playSubmitClick}
             onClick={() => setShowAboutMenu(!showAboutMenu)}
             style={{
