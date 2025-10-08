@@ -1019,7 +1019,7 @@ export default function Home() {
           display: 'flex',
           alignItems: 'center',
           padding: '2px',
-          zIndex: 5,
+          zIndex: 7,
           borderTop: '1px solid #DFDFDF',
           borderLeft: '1px solid #DFDFDF',
           borderRight: '1px solid #000000',
