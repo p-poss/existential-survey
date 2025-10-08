@@ -1,8 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { checkRateLimit, getRateLimitHeaders, logRateLimitViolation } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting for admin login attempts
+    const rateLimit = checkRateLimit(request, 'ADMIN_LOGIN')
+    
+    if (!rateLimit.allowed) {
+      // Log the violation
+      logRateLimitViolation(
+        request.headers.get('x-forwarded-for') || 'unknown',
+        'ADMIN_LOGIN',
+        '/api/auth/login',
+        request.headers.get('user-agent') || undefined
+      )
+      
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime,
+        rateLimit.retryAfter
+      )
+      
+      const contentType = request.headers.get('content-type') || ''
+      if (contentType.includes('application/x-www-form-urlencoded')) {
+        return NextResponse.redirect(new URL('/login?error=rate_limited', request.url))
+      }
+      
+      return NextResponse.json(
+        { 
+          error: 'Too many login attempts. Please try again later.',
+          retryAfter: rateLimit.retryAfter
+        },
+        { 
+          status: 429,
+          headers
+        }
+      )
+    }
+
     let password: string
     
     // Handle both JSON and form data
@@ -34,20 +71,32 @@ export async function POST(request: NextRequest) {
         path: '/'
       })
       
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime
+      )
+
       // Redirect to admin page for form submissions
       if (contentType.includes('application/x-www-form-urlencoded')) {
         return NextResponse.redirect(new URL('/admin', request.url))
       }
       
-      return NextResponse.json({ success: true })
+      return NextResponse.json({ success: true }, { headers })
     } else {
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime
+      )
+      
       if (contentType.includes('application/x-www-form-urlencoded')) {
         return NextResponse.redirect(new URL('/login?error=invalid', request.url))
       }
       
       return NextResponse.json(
         { error: 'Invalid password' },
-        { status: 401 }
+        { status: 401, headers }
       )
     }
   } catch (error) {

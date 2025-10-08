@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { validateEmailSubmission } from '@/lib/validation'
+import { checkRateLimit, getRateLimitHeaders, logRateLimitViolation } from '@/lib/rate-limit'
 
 // Initialize Resend only if API key is available
 const getResend = () => {
@@ -12,12 +13,49 @@ const getResend = () => {
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting for email sending
+    const rateLimit = checkRateLimit(request, 'EMAIL_SENDING')
+    
+    if (!rateLimit.allowed) {
+      // Log the violation
+      logRateLimitViolation(
+        request.headers.get('x-forwarded-for') || 'unknown',
+        'EMAIL_SENDING',
+        '/api/email',
+        request.headers.get('user-agent') || undefined
+      )
+      
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime,
+        rateLimit.retryAfter
+      )
+      
+      return NextResponse.json(
+        { 
+          error: 'Too many email requests. Please try again later.',
+          retryAfter: rateLimit.retryAfter
+        },
+        { 
+          status: 429,
+          headers
+        }
+      )
+    }
+
     // Check if Resend is configured
     const resend = getResend()
     if (!resend) {
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime
+      )
+      
       return NextResponse.json(
         { error: 'Email service not configured' },
-        { status: 500 }
+        { status: 500, headers }
       )
     }
 
@@ -89,9 +127,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const headers = getRateLimitHeaders(
+      rateLimit.allowed,
+      rateLimit.remaining,
+      rateLimit.resetTime
+    )
+
     return NextResponse.json(
       { success: true, id: data?.id },
-      { status: 200 }
+      { status: 200, headers }
     )
 
   } catch (error) {

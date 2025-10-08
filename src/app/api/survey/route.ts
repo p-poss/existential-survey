@@ -2,14 +2,52 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { validateSurveySubmission, hasMinimumData } from '@/lib/validation'
 import { isAuthenticated } from '@/lib/auth'
+import { checkRateLimit, getRateLimitHeaders, logRateLimitViolation } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting for survey submissions
+    const rateLimit = checkRateLimit(request, 'SURVEY_SUBMISSION')
+    
+    if (!rateLimit.allowed) {
+      // Log the violation
+      logRateLimitViolation(
+        request.headers.get('x-forwarded-for') || 'unknown',
+        'SURVEY_SUBMISSION',
+        '/api/survey',
+        request.headers.get('user-agent') || undefined
+      )
+      
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime,
+        rateLimit.retryAfter
+      )
+      
+      return NextResponse.json(
+        { 
+          error: 'Too many survey submissions. Please try again later.',
+          retryAfter: rateLimit.retryAfter
+        },
+        { 
+          status: 429,
+          headers
+        }
+      )
+    }
+
     // Gracefully handle missing Supabase configuration in production
     if (!supabase) {
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime
+      )
+      
       return NextResponse.json(
         { success: true, id: null, note: 'Supabase not configured; response accepted without persistence' },
-        { status: 201 }
+        { status: 201, headers }
       )
     }
 
@@ -62,9 +100,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const headers = getRateLimitHeaders(
+      rateLimit.allowed,
+      rateLimit.remaining,
+      rateLimit.resetTime
+    )
+
     return NextResponse.json(
       { success: true, id: data?.[0]?.id },
-      { status: 201 }
+      { status: 201, headers }
     )
 
   } catch (error) {
@@ -76,14 +120,50 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // Apply rate limiting for admin API access
+    const rateLimit = checkRateLimit(request, 'API_GENERAL')
+    
+    if (!rateLimit.allowed) {
+      logRateLimitViolation(
+        request.headers.get('x-forwarded-for') || 'unknown',
+        'API_GENERAL',
+        '/api/survey',
+        request.headers.get('user-agent') || undefined
+      )
+      
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime,
+        rateLimit.retryAfter
+      )
+      
+      return NextResponse.json(
+        { 
+          error: 'Too many requests. Please try again later.',
+          retryAfter: rateLimit.retryAfter
+        },
+        { 
+          status: 429,
+          headers
+        }
+      )
+    }
+
     // Check authentication for admin access
     const authenticated = await isAuthenticated()
     if (!authenticated) {
+      const headers = getRateLimitHeaders(
+        rateLimit.allowed,
+        rateLimit.remaining,
+        rateLimit.resetTime
+      )
+      
       return NextResponse.json(
         { error: 'Unauthorized' },
-        { status: 401 }
+        { status: 401, headers }
       )
     }
 
@@ -109,7 +189,13 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ responses: data || [] })
+    const headers = getRateLimitHeaders(
+      rateLimit.allowed,
+      rateLimit.remaining,
+      rateLimit.resetTime
+    )
+
+    return NextResponse.json({ responses: data || [] }, { headers })
 
   } catch (error) {
     console.error('API error:', error)
