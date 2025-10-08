@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@isthis.life', // Default to your preferred domain
+      from: process.env.FROM_EMAIL || 'onboarding@resend.dev', // Default to Resend's verified domain
       to: [email],
       subject: 'Your Survey Answers - 13 Questions To Contemplate Before We Die',
       html: emailContent,
