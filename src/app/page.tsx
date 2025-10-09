@@ -780,7 +780,7 @@ export default function Home() {
                       transform: 'translateX(-50%)',
                       width: '100vw'
                     }}>
-                      <Image src="/party2.gif" alt="" width={140} height={140} className="opacity-90" />
+                      <Image src="/clippy.gif" alt="" width={140} height={140} className="opacity-90" />
                     </div>
                   )}
                   <h2
